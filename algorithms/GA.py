@@ -1,8 +1,7 @@
 import random
-from rueda_trasera_fisopt import prueba_simulador
 import time
 import json  # formato de texto universal
-
+from controllers.benchmark import get_eval
 from deap import base
 from deap import creator
 from deap import tools
@@ -18,7 +17,7 @@ toolbox.register("attr_float", random.uniform, 0,1)
 # Structure initializers
 toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, 10)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("evaluate", prueba_simulador)
+toolbox.register("evaluate", get_eval('fis5r10p','rueda_trasera_fisopt'))
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("mutate", tools.mutGaussian, mu=0.0, sigma= 0.2, indpb=0.2)
 toolbox.register("select", tools.selTournament, tournsize=3)
@@ -39,7 +38,7 @@ def main(config):
         pop=[]   # crea una lista nueva
         # de ind tipo flotante pop=[[1.2,1.7,1.3,2.4],[1.2,1.7,1.3,2.4],[1.2,1.7,1.3,2.4],[1.2,1.7,1.3,2.4]]
         # porque se definio individuos de 4 elementos cromosoma
-        # si se quiere accesar elementos se crea una lista de  diccionarios
+        # si se qui nere accesar elementos se crea una lista de  diccionarios
         # pop = [{'individuo': [1.2,1.7,1.3,2.4], 'score': 1.23}, {,},{,}] etc
         # y se accesa a los elementos print([pop[0]['score'])
         # print (pop[0]['índividuo'])

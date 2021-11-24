@@ -1,12 +1,11 @@
 from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
-from ruta_curvas import CubicSplinePath, Pi_2_pi
+from simulations.ruta_curvas import CubicSplinePath, Pi_2_pi
 import math
-#from My_FIS_optimo import fis_opt
-#from My_Fis_5FMFijo import fis_opt
 
-from Control_RuedaT.GA5.fis_params5 import fis_opt
+from importlib import import_module
+
 L= 2.9  # longitud del vehiculo en mts
 KTH = 1.0   # constante de ajuste k2
 KE = 0.3    # constanste k
@@ -23,18 +22,21 @@ def modelo(z, t, delta, aceleracion):
     return [dx_dt, dy_dt,dteta_dt,dv_dt]
 
 # este metodo lo reemplazaremos con el FIS para que nos regrese delta
-def control_rueda_trasera(v, yaw0, e, k, yaw_ref, params):
+def control_rueda_trasera(v, yaw0, e, k, yaw_ref, params, controller):
     #calcular el error
     error_teta = Pi_2_pi(yaw0 - yaw_ref)
-    #omega = v * k * math.cos(error_teta) / (1.0-k*e) - KTH * abs(v) * error_teta- KE * v * math.sin(error_teta) / error_teta * e
-
+    omega = 0.0 
+    if not controller:
+        omega = v * k * math.cos(error_teta) / (1.0-k*e) - KTH * abs(v) * error_teta- KE * v * math.sin(error_teta) / error_teta * e
+    else:
+        omega = controller(error_teta, e, params=params)
+        
     # sustituir la formula con el fis sin optimizar
     # mandas el error teta y aerror
 
     ## llamar al fis optimizado
     #print(error_teta, e)
 
-    omega = fis_opt(error_teta, e, params=params)
     # if error_teta > 0:
     #     omega*=-1
 
@@ -68,7 +70,7 @@ def pid_control(velocidad_objetivo, v):
 
 
 # definir el estado inicial
-def simulacion(ruta, meta_objetivo, params):
+def simulacion(ruta, meta_objetivo, params, controller):
     # posiciones iniciales
     x0 = 0.0
     y0 = 0.0
@@ -87,7 +89,7 @@ def simulacion(ruta, meta_objetivo, params):
     # defines un arreglo de los tiempos que vas a medir de 0-10 seg, y los partes en 100 pedazos
     # lo pones en 101 para que haga 100 pedazos
     t = np.linspace(1, 50,501)
-
+    
     # haces un arreglo en numpy de unos en el tiempo
    # deltai = np.zeros(len(t))
   #  aceleracioni=np.zeros(len(t))
@@ -142,13 +144,13 @@ def simulacion(ruta, meta_objetivo, params):
         error.append(e)
 
         try:
-            di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params)
+            di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
         except :
             error_flag = True
             break
 
-
-        di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params)
+        # Dos veces?
+        di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
 
         speed_ref, direction = calc_target_speed(yaw0, yaw_ref, direction)
         aceleracion = pid_control(speed_ref, v0)
@@ -170,13 +172,13 @@ def simulacion(ruta, meta_objetivo, params):
         dy = y0 - meta_objetivo[1]
 
         if math.hypot(dx,dy) <= 0.3:
-            print("META")
+            #print("META")
             goal_flag = True
             break
 
     return x, y, yaw, v, goal_flag, i, error, error_flag
 
-def prueba_simulador(params, grafica=False):
+def prueba_simulador(params, controller, grafica=False):
     # puntos para definir la ruta m
     #ax = [0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0]
     #ay = [0.0, 0.0,  5.0, 6.5, 3.0, 5.0, -2.0]
@@ -194,7 +196,7 @@ def prueba_simulador(params, grafica=False):
     suma_error=0
     for ax, ay in lista_rutas:
 
-        error_ruta =  rutas(ax, ay, params, grafica)
+        error_ruta =  rutas(ax, ay, params, controller, grafica)
 
         suma_error += error_ruta[0]
 
@@ -204,10 +206,10 @@ def prueba_simulador(params, grafica=False):
 
 
 
-def rutas(ax, ay, params, grafica=False):  # metodo a llamar 3 veces
+def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
         ruta_referencia = CubicSplinePath(ax,ay)
         meta_objetivo = [ax[-1], ay[-1]]
-        x, y, yaw, v, goal_flag, i, error, error_flag = simulacion(ruta_referencia, meta_objetivo, params)
+        x, y, yaw, v, goal_flag, i, error, error_flag = simulacion(ruta_referencia, meta_objetivo, params, controller)
 
         #assert goal_flag
         #spline = np.arange(0, ruta_referencia.length, 0.1)
@@ -215,10 +217,10 @@ def rutas(ax, ay, params, grafica=False):  # metodo a llamar 3 veces
         #t= t[:i+2]
         #yaw_pi = map(Pi_2_pi,yaw)
         if error_flag:
-            print("Bad Controller")
+            #print("Bad Controller")
             return 5000,
         if not goal_flag:
-            print("no llego")
+            #print("no llego")
             return 2000,
         #error_rmse = sum([i**2 for i in error])/len(error)**.5
         # print(error_rmse)
@@ -269,19 +271,11 @@ def rutas(ax, ay, params, grafica=False):  # metodo a llamar 3 veces
 
             plt.show()
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
-        print("error",error_rmse)
+        #print("error",error_rmse)
         return error_rmse,
 
 if __name__ == '__main__':
-    # ruta m
-    #prueba_simulador([0.9054750552355649, 1.313749939916838, 1.2115608804558582, 1.0984015671585659],True)
-    # ruta A
-    #prueba_simulador([0.08088644788091975, 2.8483486172253603, 0.8885607474620291, 0.5418827997757919],True)
-    # ruta s
-    #prueba_simulador([6.726928936568646, 4.693242467303574, 5.552748248812912, 0.7633253589418352], True)
-    #rutas([1.1146003785318166, 5.419685453162956, 1.8528160709129537, 3.1013579161149276], True)
-    #prueba_simulador([0.41192781559444747, 7.764405748264, 0.7381872279193622, 0.8387152453671036],True)
-    #prueba_simulador([3.824353739502582, 1.1507662981789863, 1.2050211027497757, 0.12306023229956276],True)
-    #prueba_simulador([0.7129072353481256, 0.6950511269226142, 0.4050757896004107, 0.5196998000235793, 0.59708268324291787, 0.48749702495492913, 0.3155646574417933, 0.4239541979859553],True)
-    prueba_simulador([0.8959158028155084, 0.658995053052556, 0.676739138745285, 0.559788140918265, 1.0342303561818451, -0.06451794622238155, 0.4669683430430709, 0.6595549547377009, 0.5788390726539321, 1.1403916447411557],True)
-    #prueba_simulador([0.699229139753049, 0.4694223323379423, 0.45265565822337295, 0.7055835655386178, 0.7892938318573711, 0.9128506262286898, 0.12208385398422117, 0.0027819470367980575],True)
+    from controllers.fis_params5 import fis_opt
+    controller = fis_opt
+    prueba_simulador([0.8959158028155084, 0.658995053052556, 0.676739138745285, 0.559788140918265, 1.0342303561818451, -0.06451794622238155, 0.4669683430430709, 0.6595549547377009, 0.5788390726539321, 1.1403916447411557],controller, True)
+
