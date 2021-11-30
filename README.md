@@ -5,7 +5,7 @@ pip3 install -r requirements.txt
 ```
 
 
-##En la terminal Windows PowerShell
+## En la terminal Windows PowerShell
 ```
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\Activate.ps1
