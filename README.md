@@ -10,3 +10,5 @@ pip3 install -r requirements.txt
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\Activate.ps1
 ```
+
+## Modificiones
