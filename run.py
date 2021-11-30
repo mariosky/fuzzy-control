@@ -3,10 +3,10 @@ import csv
 import json
 import uuid
 
-config = {'pop_size': 20,'cxpb':0.7, 'mutpb':0.3, 'ngen':50,
+config = {'pop_size': 50,'cxpb':0.7, 'mutpb':0.3, 'ngen':20,
         'controller_module':'fis5r10p',
         'simulation':'rueda_trasera_fisopt',
-        'runs':15
+        'runs':1
         }
 
 
@@ -16,7 +16,7 @@ for i in range(config['runs']):
     print("      run {}".format(i))
     result = GA.main(config.copy()) 
     results.append((result['Best_fitness'][0], result['Tiempo_Total'], result['Total_num_eval'], result['Best_solution']))
-    
+
 
 
 

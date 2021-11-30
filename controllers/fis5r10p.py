@@ -49,9 +49,9 @@ def fis_opt(e_teta, error, params=[], grafica=False):
     e_teta_hi_pos = fuzz.trapmf(x_e_teta, [b-c, b, 5, 50])
 
     error_hi_neg  = fuzz.trapmf(x_error, [-50, -5,-g, -g+h])
-    error_med_neg = fuzz.trimf(x_e_teta, [-i-j, -i, -i+j])
+    error_med_neg = fuzz.trimf(x_error, [-i-j, -i, -i+j])
     error_lo      = fuzz.trimf(x_error,  [-f, 0, f])
-    error_med_pos = fuzz.trimf(x_e_teta, [i-j, i, i+j])
+    error_med_pos = fuzz.trimf(x_error, [i-j, i, i+j])
     error_hi_pos  = fuzz.trapmf(x_error, [g-h, g, 5, 50])
 
     omega_hi_neg  = fuzz.trapmf(x_omega,  [-50,-5,-1,-0.5])
