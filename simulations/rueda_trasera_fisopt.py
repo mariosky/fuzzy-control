@@ -270,6 +270,7 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             # plt.legend()
 
             plt.show()
+        #print(error)
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
         #print("error",error_rmse)
         return error_rmse,

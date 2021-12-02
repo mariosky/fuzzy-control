@@ -3,10 +3,11 @@ import csv
 import json
 import uuid
 
-config = {'pop_size': 50,'cxpb':0.7, 'mutpb':0.3, 'ngen':20,
+config = {'pop_size': 20,'cxpb':0.7, 'mutpb':0.3, 'ngen':50,
         'controller_module':'fis5r10p',
         'simulation':'rueda_trasera_fisopt',
-        'runs':1
+        'runs':1, 
+        'ini_min':0, 'ini_max':2
         }
 
 
@@ -20,10 +21,10 @@ for i in range(config['runs']):
 
 
 
-with open("{}-{}_config.json".format(config['controller_module'], experiment_id), "w") as outfile:
+with open("./results/{}-{}_config.json".format(config['controller_module'], experiment_id), "w") as outfile:
     json.dump(config, outfile)
 
-with open('{}-{}_results.csv'.format(config['controller_module'], experiment_id),'w') as out:
+with open('./results/{}-{}_results.csv'.format(config['controller_module'], experiment_id),'w') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['Best','Time','Evals', 'Best_solution' ])
     for row in results:

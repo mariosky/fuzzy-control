@@ -9,21 +9,23 @@ from deap import tools
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, typecode='d', fitness=creator.FitnessMin)
 
-toolbox = base.Toolbox()
 
-# Attribute generator
-toolbox.register("attr_float", random.uniform, 0,1)
-
-# Structure initializers
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, 10)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("evaluate", get_eval('fis5r10p','rueda_trasera_fisopt'))
-toolbox.register("mate", tools.cxOnePoint)
-toolbox.register("mutate", tools.mutGaussian, mu=0.0, sigma= 0.2, indpb=0.2)
-toolbox.register("select", tools.selTournament, tournsize=3)
 
 
 def main(config):
+    toolbox = base.Toolbox()
+
+    # Attribute generator
+    toolbox.register("attr_float", random.uniform, config['ini_min'],config['ini_max'])
+
+    # Structure initializers
+    toolbox.register("individual", tools.initRepeat, creator.Individual,
+            toolbox.attr_float, 10) # parametro 
+    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+    toolbox.register("evaluate", get_eval('fis5r10p','rueda_trasera_fisopt'))# parametro
+    toolbox.register("mate", tools.cxOnePoint)
+    toolbox.register("mutate", tools.mutGaussian, mu=0.0, sigma= 0.2, indpb=0.2)
+    toolbox.register("select", tools.selTournament, tournsize=3)
     #empezar a contar el tiempo
     inicio_tiempo=time.time()  # te asigna el tiempo actual
     #random.seed(64)
@@ -111,8 +113,9 @@ def main(config):
          #  ordenar los fitness
         fits = [ind.fitness.values[0] for ind in config['pop']]
 
+
         # imprimir los fitnes de cada generacion
-     #   print(fits)  # lista de todos los fitness
+        #print(fits)  # lista de todos los fitness
       #  print(min(fits),tools.selBest(config['pop'], 1))
 
         # guardas las listas

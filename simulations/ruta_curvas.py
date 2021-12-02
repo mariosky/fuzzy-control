@@ -70,6 +70,9 @@ class CubicSplinePath:
         if angle < 0:
             e *= -1
         # No se usan, solo e, Theta, k, s
+        # Algunas veces es un np array
+        if isinstance(e, np.ndarray):
+            e = e[0]
         return e, k, yaw, s
 
 

@@ -1,0 +1,1 @@
+{"pop_size": 50, "cxpb": 0.7, "mutpb": 0.3, "ngen": 20, "controller_module": "fis5r10p", "simulation": "rueda_trasera_fisopt", "runs": 1}
