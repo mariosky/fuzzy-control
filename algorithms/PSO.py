@@ -10,17 +10,17 @@ import math
 
 from deap import base
 from deap import creator
-
+import time
 from deap import creator
 from deap import tools
 
 from controllers.benchmark import get_eval
 # Minimizamos
 # smin, smax velocidades máximas
-# 
+#
+inicio_tiempo = time.time()  # te asigna el tiempo actual
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Particle", list, fitness=creator.FitnessMin, speed=list,
-                                        smin=-0.5, smax=0.5, best=None)
+creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=0.5,smax=0.5, best=None)
 # pmax y pmin rango de valores que va a tomar la partícula
 # smin y smax velocidades máximas
 def generate(size, pmin, pmax, smin, smax):
@@ -49,13 +49,13 @@ def updateParticle(part, best, phi1, phi2):
             part.speed[i] = math.copysign(part.smax, speed)
     part[:] = list(map(operator.add, part, part.speed))
 
-def main():
+def main(config):
     toolbox = base.Toolbox()
-    toolbox.register("particle", generate, size=10, pmin=0, pmax=1, smin=-0.5, smax=0.5)
-    toolbox.register("evaluate", get_eval('fis5r10p','rueda_trasera_fisopt'))# parametro
+    toolbox.register("particle", generate,  size=config['list_size'], pmin=config['pmin'], pmax=config['pmax'], smin=config['smin'], smax=config['smax'])
+    toolbox.register("evaluate", get_eval(config['controller_module'], config['simulation']))# parametro   get_eval(fis, px control)
     toolbox.register("population", tools.initRepeat, list, toolbox.particle)
-    toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
-    pop = toolbox.population(n=20)
+    toolbox.register("update", updateParticle, phi1=config['phi1'], phi2=config['phi2'])
+    pop = toolbox.population(n=config['pop_size'])
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", numpy.mean)
@@ -66,7 +66,7 @@ def main():
     logbook = tools.Logbook()
     logbook.header = ["gen", "evals"] + stats.fields
 
-    GEN = 50
+    GEN = config['ngen']
     best = None
 
     for g in range(GEN):
@@ -84,5 +84,13 @@ def main():
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
+#        config['Tiempo_Total'] = time.time() - inicio_tiempo
     
-    return pop, logbook, best
+ #   return best.fitness, best, Tiempo_Total
+    config['Tiempo_Total'] = time.time() - inicio_tiempo
+    config['Total_num_eval'] = config['pop_size']
+    config['Best_fitness'] = best.fitness.values[0]
+    config['Best_Particle'] = best
+    config['Estadistica_gen'] = stats.fields
+    config['pop'] = pop
+    return config

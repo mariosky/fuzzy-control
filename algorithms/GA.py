@@ -19,10 +19,9 @@ def main(config):
     toolbox.register("attr_float", random.uniform, config['ini_min'],config['ini_max'])
 
     # Structure initializers
-    toolbox.register("individual", tools.initRepeat, creator.Individual,
-            toolbox.attr_float, 10) # parametro 
+    toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, config['list_size']) # parametro
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("evaluate", get_eval('fis5r10p','rueda_trasera_fisopt'))# parametro
+    toolbox.register("evaluate", get_eval(config['controller_module'], config['simulation']))# parametro
     toolbox.register("mate", tools.cxOnePoint)
     toolbox.register("mutate", tools.mutGaussian, mu=0.0, sigma= 0.2, indpb=0.2)
     toolbox.register("select", tools.selTournament, tournsize=3)

@@ -3,7 +3,8 @@ import csv
 import json
 import uuid
 
-config = {'pop_size': 20,'cxpb':0.7, 'mutpb':0.3, 'ngen':50,
+config = {'pop_size': 20, 'ngen':50, 'cxpb':0.7, 'mutpb':0.3,
+        'list_size': 9,  # numero de genes en el cromosoma
         'controller_module':'fis5r10p',
         'simulation':'rueda_trasera_fisopt',
         'runs':1, 
