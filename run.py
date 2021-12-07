@@ -3,9 +3,9 @@ import csv
 import json
 import uuid
 
-config = {'pop_size': 20, 'ngen':50, 'cxpb':0.7, 'mutpb':0.3,
+config = {'pop_size': 10, 'ngen':3, 'cxpb':0.7, 'mutpb':0.3,
         'list_size': 9,  # numero de genes en el cromosoma
-        'controller_module':'fis5r10p',
+        'controller_module':'fis3f9p',
         'simulation':'rueda_trasera_fisopt',
         'runs':1, 
         'ini_min':0, 'ini_max':2
@@ -17,7 +17,7 @@ results = []
 for i in range(config['runs']):
     print("      run {}".format(i))
     result = GA.main(config.copy()) 
-    results.append((result['Best_fitness'][0], result['Tiempo_Total'], result['Total_num_eval'], result['Best_solution']))
+    results.append((result['Best_fitness'], result['Tiempo_Total'], result['Total_num_eval'], result['Best_solution']))
 
 
 
