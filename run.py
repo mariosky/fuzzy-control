@@ -7,7 +7,7 @@ config = {'pop_size': 50, 'ngen':20, 'cxpb':0.7, 'mutpb':0.3,
         'list_size': 9,  # numero de genes en el cromosoma
         'controller_module':'fis3f9p',
         'simulation':'rueda_trasera_fisopt',
-        'runs':1, 
+        'runs':30,
         'ini_min':0, 'ini_max':1
         }
 
