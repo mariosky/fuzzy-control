@@ -189,10 +189,13 @@ def prueba_simulador(params, controller, grafica=False):
     #ax = [0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0]
     #ay = [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]
 
-    lista_rutas=[[[0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0,  5.0, 6.5, 3.0, 5.0, -2.0]]]
+    #lista_rutas=[[[0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0,  5.0, 6.5, 3.0, 5.0, -2.0]]]
+    #lista_rutas= [[[0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0],[0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]]]
+    #lista_rutas = [[[0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0],[0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]]]
 
-              #  [[0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0],[0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]],
-             #   [[0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0],[0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]]]
+    lista_rutas=[[[0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0,  5.0, 6.5, 3.0, 5.0, -2.0]],
+    [[0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0], [0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]],
+    [[0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0],[0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]]]
     suma_error=0
     for ax, ay in lista_rutas:
 
@@ -232,15 +235,15 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
         #grafica=True
         if grafica:
 
-            spline = np.arange(0, ruta_referencia.length, 0.1)
+            spline = np.arange(0, ruta_referencia.length+0.09, 0.1)
             t = np.linspace(0, 50, 501)
             t= t[:i+2]
             yaw_pi = map(Pi_2_pi,yaw)
 
             plt.subplots(1)
-            plt.plot(ax, ay, "xb", label="Input")
-            plt.plot(ruta_referencia.X(spline),ruta_referencia.Y(spline), "-r", label= "Ruta")
-            plt.plot(x, y, "-g", label= "Seguimiento")
+            plt.plot(ax, ay, "xb", label="spline")
+            plt.plot(ruta_referencia.X(spline),ruta_referencia.Y(spline), "-r", label= "route")
+            plt.plot(x, y, "-g", label= "tracking")
             plt.axis("equal")
             plt.grid(True)
             plt.xlabel("x (mts)")
@@ -248,26 +251,26 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             plt.legend()
 
 
-            # plt.subplots(1)
-            # plt.plot(t, np.rad2deg(list(yaw_pi)), "-r", label="yaw")
-            # plt.grid(True)
-            # plt.xlabel("tiempo (seg)")
-            # plt.ylabel("theta (grados)")
-            # plt.legend()
-            #
-            # plt.subplots(1)
-            # plt.plot(spline, np.rad2deg(ruta_referencia.calc_yaw(spline)),"-r", label="yaw-Ruta Ref")
-            # plt.grid(True)
-            # plt.xlabel("line length (mts)")
-            # plt.ylabel("yaw angle (grados)")
-            # plt.legend()
-            #
-            # plt.subplots(1)
-            # plt.plot(t, v, "-b", label="velocidad")
-            # plt.grid(True)
-            # plt.xlabel("tiempo (seg)")
-            # plt.ylabel("velocidad (m/s)")
-            # plt.legend()
+            plt.subplots(1)
+            plt.plot(t, np.rad2deg(list(yaw_pi)), "-r", label="yaw")
+            plt.grid(True)
+            plt.xlabel("time (seg)")
+            plt.ylabel("theta (degrees)")
+            plt.legend()
+
+            plt.subplots(1)
+            plt.plot(spline, np.rad2deg(ruta_referencia.calc_yaw(spline)),"-r", label="yaw-reference")
+            plt.grid(True)
+            plt.xlabel("line length (mts)")
+            plt.ylabel("yaw angle (degrees)")
+            plt.legend()
+
+            plt.subplots(1)
+            plt.plot(t, v, "-b", label="velocity")
+            plt.grid(True)
+            plt.xlabel("time (seg)")
+            plt.ylabel("velocity (m/s)")
+            plt.legend()
 
             plt.show()
         #print(error)
@@ -276,7 +279,13 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
         return error_rmse,
 
 if __name__ == '__main__':
-    from controllers.fis_params5 import fis_opt
+    # controlador 3 funciones memb con 9 param
+    #from controllers.fis3f9p import fis_opt
+    #controller = fis_opt
+    #prueba_simulador([0.5100006103689083, -0.41621313195522447, 0.8251985475495492, 0.4114258655863874, 0.495287507338406, 0.24805299883193144, 1.6146050014785913, 0.1643118499073945, 0.22840629626085052],controller, True)
+
+    # controlador 5 funciones memb con 10 param
+    from controllers.fis5r10p import fis_opt
     controller = fis_opt
-    prueba_simulador([0.8959158028155084, 0.658995053052556, 0.676739138745285, 0.559788140918265, 1.0342303561818451, -0.06451794622238155, 0.4669683430430709, 0.6595549547377009, 0.5788390726539321, 1.1403916447411557],controller, True)
+    prueba_simulador([0.6190221005252283, 0.7468804693125494, 0.8393343791227867, 0.14847736757407515, 0.9752342996488179, -0.16865413808712387, 0.638338013088172, 0.811058207120933, -0.007083765393046837, 0.662730258868478],controller, True)
 
