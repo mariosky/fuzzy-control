@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from simulations.ruta_curvas import CubicSplinePath, Pi_2_pi
 import math
+import warnings
 
 from importlib import import_module
 
@@ -157,8 +158,11 @@ def simulacion(ruta, meta_objetivo, params, controller):
 
         inputs = (di, aceleracion)
 
+        z = None
         # correr el modelo
-        z=odeint(modelo, z0, [0,0.1], args=inputs)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            z=odeint(modelo, z0, [0,0.1], args=inputs)
 
         z0 = z[-1]
         x0, y0, yaw0, v0 = z0  #le asignas el ultimo valor de z que es donde estan los valores

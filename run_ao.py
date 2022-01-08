@@ -7,7 +7,7 @@ config = {'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,
         'pmin': 0, 'pmax': 1,
         'list_size':10,     #numero de particulas
         'controller_module':'fis5r10p',
-        'simulation': 'rueda_trasera_fisopt',venv\Scripts\Activate.ps1venv\Scripts\Activate.ps1
+        'simulation': 'rueda_trasera_fisopt',
         'runs':15
         }
 
