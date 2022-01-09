@@ -17,7 +17,7 @@ config = { 'algorithm':'GWO',
         'runs':2
         }
 
-main = get_main('AOA')
+main = get_main(config['algorithm'])
 
 #print(PSO.main(config))
 
