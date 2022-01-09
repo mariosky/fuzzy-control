@@ -16,6 +16,7 @@ from deap import tools
 
 from copy import deepcopy
 from controllers.benchmark import get_eval
+from sys import float_info
 
 # Minimizamos
 # smin, smax velocidades máximas
@@ -62,6 +63,12 @@ def main(config):
     logbook = tools.Logbook()
     logbook.header = ["gen", "evals"] + stats.fields
 
+    alpha=5
+    miu=0.5
+    moa_min=0.2
+    moa_max=0.9
+
+
     GEN = config['ngen']
     best = None
     # Update fitness population
@@ -81,21 +88,28 @@ def main(config):
 
         g += 1
         # linearly decreased from 2 to 0
-        a = 2 - 2 * g / (GEN - 1)
+        moa = moa_min + GEN * ((moa_max - moa_min) / g)  # Eq. 2
+        mop = 1 - (GEN ** (1.0 / alpha)) / (g ** (1.0 / alpha))  # Eq. 4
+
         list_best = list(map(np.array, get_best_solutions(pop, k=3)))
 
 
         pop_new = []
         for part in pop:
-            A1, A2, A3 = a * (2 * np.random.uniform() - 1), a * (2 * np.random.uniform() - 1), a * (2 * np.random.uniform() - 1)
-            C1, C2, C3 = 2 * np.random.uniform(), 2 * np.random.uniform(), 2 * np.random.uniform()
-            X1 = list_best[0] - A1 * np.abs(C1 * list_best[0] - part)
-            X2 = list_best[1] - A2 * np.abs(C2 * list_best[1] - part)
-            X3 = list_best[2] - A3 * np.abs(C3 * list_best[2] - part)
-            #print("new", pos_new)
-            #print("part", part)
-
-            pos_new = list((X1 + X2 + X3)/3)
+            pos_new = deepcopy(part)
+            for j in range(size):
+                r1, r2, r3 = np.random.rand(3)
+                if r1 > moa:  # Exploration phase
+                    if r2 < 0.5:
+                        pos_new[j] = best[j] / (mop + float_info.epsilon) * \
+                                     ((config["pmax"] - config["pmin"]) * miu + config["pmin"])
+                    else:
+                        pos_new[j] = best[j] * mop * ((config["pmax"] - config["pmin"]) * miu + config["pmin"])
+                else:  # Exploitation phase
+                    if r3 < 0.5:
+                        pos_new[j] = best[j] - mop * ((config["pmax"] - config["pmin"]) * miu + config["pmin"])
+                    else:
+                        pos_new[j] = best[j] + mop * ((config["pmax"] - config["pmin"]) * miu + config["pmin"])
 
             for i, x in enumerate(pos_new):
                 if abs(x) < config['pmin']:
@@ -103,7 +117,7 @@ def main(config):
                 elif abs(x) > config['pmax']:
                     pos_new[i] = math.copysign(config['pmax'], x)
 
-            pop_new.append(creator.Particle(pos_new))
+            pop_new.append(pos_new)
 
         # Update fitness population
         for part in pop_new:
@@ -137,7 +151,7 @@ def main(config):
 
 
 if __name__ == '__main__':
-    config = {'pop_size': 20, 'ngen': 10, 'smin': -0.25, 'smax': 0.25,
+    config = {'pop_size': 50, 'ngen': 20, 'smin': -0.25, 'smax': 0.25,
               'pmin': 0, 'pmax': 1,
               'list_size': 10,  # numero de particulas
               'controller_module': 'fis5r10p',

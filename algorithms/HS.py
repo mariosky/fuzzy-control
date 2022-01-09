@@ -13,7 +13,6 @@ from deap import creator
 import time
 from deap import creator
 from deap import tools
-
 from copy import deepcopy
 from controllers.benchmark import get_eval
 
@@ -25,8 +24,6 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=0.5, smax=0.5, best=None)
 
 
-# pmax y pmin rango de valores que va a tomar la partícula
-# smin y smax velocidades máximas
 def generate(size, pmin, pmax, smin, smax):
     part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size))
     part.speed = [random.uniform(smin, smax) for _ in range(size)]
@@ -35,9 +32,6 @@ def generate(size, pmin, pmax, smin, smax):
     return part
 
 
-def get_best_solutions(pop, k=3):
-    pop = sorted(pop, key=lambda part: part.fitness.values)
-    return deepcopy(pop[:k])
 
 
 
@@ -64,6 +58,13 @@ def main(config):
 
     GEN = config['ngen']
     best = None
+    n_new = 50
+    c_r = 0.95
+    pa_r = 0.05
+    fw = 0.0001 * (config["pmax"] - config["pmin"])
+    fw_damp = 0.9995
+    dyn_fw = fw
+
     # Update fitness population
     for part in pop:
         total_evals += 1
@@ -79,23 +80,19 @@ def main(config):
 
     for g in range(GEN):
 
-        g += 1
-        # linearly decreased from 2 to 0
-        a = 2 - 2 * g / (GEN - 1)
-        list_best = list(map(np.array, get_best_solutions(pop, k=3)))
-
-
+        # Update positions
         pop_new = []
         for part in pop:
-            A1, A2, A3 = a * (2 * np.random.uniform() - 1), a * (2 * np.random.uniform() - 1), a * (2 * np.random.uniform() - 1)
-            C1, C2, C3 = 2 * np.random.uniform(), 2 * np.random.uniform(), 2 * np.random.uniform()
-            X1 = list_best[0] - A1 * np.abs(C1 * list_best[0] - part)
-            X2 = list_best[1] - A2 * np.abs(C2 * list_best[1] - part)
-            X3 = list_best[2] - A3 * np.abs(C3 * list_best[2] - part)
-            #print("new", pos_new)
-            #print("part", part)
+            pos_new = creator.Particle(random.uniform(config['pmin'], config['pmax']) for _ in range(size))
 
-            pos_new = list((X1 + X2 + X3)/3)
+            for j in range(size):
+                # Use Harmony Memory
+                if np.random.uniform() <= c_r:
+                    pos_new[j] = random.choice(pop)[j]
+                # Pitch Adjustment
+                if np.random.uniform() <= pa_r:
+                    delta = dyn_fw * np.random.normal(config['pmin'], config['pmax'])  # Gaussian(Normal)
+                    pos_new[j] += delta
 
             for i, x in enumerate(pos_new):
                 if abs(x) < config['pmin']:
@@ -103,7 +100,10 @@ def main(config):
                 elif abs(x) > config['pmax']:
                     pos_new[i] = math.copysign(config['pmax'], x)
 
-            pop_new.append(creator.Particle(pos_new))
+            pop_new.append(pos_new)
+
+        # Update Damp Fret Width
+        dyn_fw *= fw_damp
 
         # Update fitness population
         for part in pop_new:
@@ -113,16 +113,14 @@ def main(config):
                 best = creator.Particle(part)
                 best.fitness.values = part.fitness.values
 
-        # Greedy Selection Pop
-        pop = [pop_new[i] if pop_new[i].fitness.values < pop[i].fitness.values
-                else pop[i] for i in range(len(pop))]
-
-            #part[:] = list(map(operator.add, part, part.speed))
+        # Merge Harmony Memory and New Harmonies, Then sort them, Then truncate extra harmonies
+        pop = sorted(pop+pop_new, key=lambda part: part.fitness.values)
+        pop = deepcopy(pop[:size])
 
         # toolbox.update(part, best)
 
         # Gather all the fitnesses in one list and print the stats
-        logbook.record(gen=g, evals=total_evals, **stats.compile(pop))
+        logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
     #        config['Tiempo_Total'] = time.time() - inicio_tiempo
 
@@ -137,7 +135,7 @@ def main(config):
 
 
 if __name__ == '__main__':
-    config = {'pop_size': 20, 'ngen': 10, 'smin': -0.25, 'smax': 0.25,
+    config = {'pop_size': 50, 'ngen': 20, 'smin': -0.25, 'smax': 0.25,
               'pmin': 0, 'pmax': 1,
               'list_size': 10,  # numero de particulas
               'controller_module': 'fis5r10p',
