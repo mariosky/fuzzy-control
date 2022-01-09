@@ -115,7 +115,7 @@ def main(config):
 
         # Merge Harmony Memory and New Harmonies, Then sort them, Then truncate extra harmonies
         pop = sorted(pop+pop_new, key=lambda part: part.fitness.values)
-        pop = deepcopy(pop[:size])
+        pop = deepcopy(pop[:config['pop_size']])
 
         # toolbox.update(part, best)
 
