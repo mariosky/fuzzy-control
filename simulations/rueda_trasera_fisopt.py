@@ -95,7 +95,7 @@ def simulacion(ruta, meta_objetivo, params, controller):
    # deltai = np.zeros(len(t))
   #  aceleracioni=np.zeros(len(t))
 
-    # llena el arreglo con estos valores en el rango de las posiciones indicadas
+   # llena el arreglo con estos valores en el rango de las posiciones indicadas
    # deltai[1:9] = .5
    # deltai[10:30] = 1
    # deltai[31:40] = -1
@@ -279,7 +279,7 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             plt.show()
         #print(error)
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
-        #print("error",error_rmse)
+        print("error",error_rmse)
         return error_rmse,
 
 if __name__ == '__main__':
@@ -291,5 +291,6 @@ if __name__ == '__main__':
     # controlador 5 funciones memb con 10 param
     from controllers.fis5r10p import fis_opt
     controller = fis_opt
-    prueba_simulador([0.6190221005252283, 0.7468804693125494, 0.8393343791227867, 0.14847736757407515, 0.9752342996488179, -0.16865413808712387, 0.638338013088172, 0.811058207120933, -0.007083765393046837, 0.662730258868478],controller, True)
+    solution = [0.7895321425599207, 0.486514381925796, 0.43022274249683146, 0.6975676982390971, 0.8879391004878989, 0.9609521360233566, -0.13154647245644002, 0.367185601048029, 0.6047960207170928, 0.7793810182327733]
+    prueba_simulador(solution,controller, True)
 

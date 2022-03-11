@@ -120,7 +120,7 @@ def main(config):
         # toolbox.update(part, best)
 
         # Gather all the fitnesses in one list and print the stats
-        logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
+        logbook.record(gen=g, evals=total_evals, **stats.compile(pop))
         print(logbook.stream)
     #        config['Tiempo_Total'] = time.time() - inicio_tiempo
 
