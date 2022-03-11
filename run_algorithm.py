@@ -1,12 +1,8 @@
-#from algorithms import GWO
+
 import csv
 import json
 import uuid
-import importlib
-
-def get_main(module):
-    mod = importlib.import_module('algorithms.{}'.format(module))
-    return getattr(mod, 'main')
+from run_tools import get_main
 
 config = { 'algorithm':'GWO',
         'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,
@@ -14,7 +10,7 @@ config = { 'algorithm':'GWO',
         'list_size':10,     #numero de particulas
         'controller_module':'fis5r10p',
         'simulation': 'rueda_trasera_fisopt',
-        'runs':2
+        'runs':30
         }
 
 main = get_main(config['algorithm'])

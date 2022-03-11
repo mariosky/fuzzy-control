@@ -3,29 +3,31 @@ import redis
 import json
 import time
 
-
-config = {'pop_size': 10,'cxpb':0.7, 'mutpb':0.3, 'ngen':12,
+distributed = [("GWO", 2), ("PSO", 2), ("GA", 2)]
+config = {'pop_size': 5,'cxpb':0.7, 'mutpb':0.3, 'ngen':5,
+        'smin':-0.25, 'smax':0.25,   # pso - gwo
+        'pmin': 0, 'pmax': 1,         #gwo
+        'list_size':10,
+        'phi1': 2.0, 'phi2': 2.0,   #pso
         'controller_module':'fis5r10p',
         'simulation':'rueda_trasera_fisopt',
         'runs':1, 
         'ini_min':0, 'ini_max':1,
-        'num_poblaciones':5,
+        'num_poblaciones':6,
         'num_cycles':2
         }
 
 
-def Generador_de_poblaciones(num_poblaciones):
-      # se van a ahacer 5 poblaciones iniciales
+def Generador_de_poblaciones(distributed):
+      # se van a ahacer 6 poblaciones iniciales
     poblaciones = []
 
-    for i in range(num_poblaciones):
-        #configBasica = {'pop_size': 10,'cxpb': 0.7, 'mutpb': 0.3, 'ngen': 10}
-        configBasica = config 
-        configBasica['id']=i
-        #configBasica['cxpb']= 0.1 * i + 0.2
-        #configBasica['mutpb'] = 0.3 + i * 0.1
-        #configBasica['ngen']= random.randint(2,6)
-        poblaciones.append(configBasica)
+    for algorithm, num_poblaciones in distributed:
+        for i in range(num_poblaciones):
+            configBasica = config.copy()
+            configBasica['algorithm'] = algorithm
+            configBasica['id'] = algorithm + str(i)
+            poblaciones.append(configBasica)
     return poblaciones
 
 
@@ -41,7 +43,7 @@ def Setup(config):
             time.sleep(3)
 
     #enviamos las 5 poblaciones, lo vamos a hacer varias veces (for)
-    for poblacion in Generador_de_poblaciones(config['num_poblaciones']):
+    for poblacion in Generador_de_poblaciones(distributed):
         mensaje = json.dumps(poblacion).encode('utf-8')
         r.lpush('cola_de_mensajes', mensaje)
 
@@ -71,10 +73,10 @@ def Combina(config):
 
 
             if num_total == config['num_poblaciones']*config['num_cycles']:   # para salirse cuando llegue a 10 poblacioens
-                #print('ya son 10 poblaciones recibidas ...')
+                #print('ya son 12 poblaciones recibidas ...')
                 total_time= time.time()-inicio_tiempo
                 # imprime los resultados
-                print(total_evals/total_time, total_time, total_evals, poblacion['Best_fitness'])
+                print(total_evals/total_time, total_time, total_evals, poblacion['Best_fitness'], poblacion["algorithm"])
                 break
 
             if num_poblaciones_recibidas == 2:
@@ -118,3 +120,5 @@ def Combina(config):
 
 Setup(config)
 Combina(config)
+
+

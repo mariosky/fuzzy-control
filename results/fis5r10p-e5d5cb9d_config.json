@@ -1,1 +1,0 @@
-{"algorithm": "GWO", "pop_size": 50, "ngen": 20, "smin": -0.25, "smax": 0.25, "pmin": 0, "pmax": 1, "list_size": 10, "controller_module": "fis5r10p", "simulation": "rueda_trasera_fisopt", "runs": 2}
