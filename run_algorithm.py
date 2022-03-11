@@ -1,12 +1,8 @@
-#from algorithms import GWO
+
 import csv
 import json
 import uuid
-import importlib
-
-def get_main(module):
-    mod = importlib.import_module('algorithms.{}'.format(module))
-    return getattr(mod, 'main')
+from run_tools import get_main
 
 config = { 'algorithm':'HS',
         'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,

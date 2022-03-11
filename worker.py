@@ -1,10 +1,11 @@
 import redis
 import os
 import time
-from algorithms.GA import main
+#from algorithms.GA import main
 import json
 from json import JSONEncoder
 import numpy
+from run_tools import get_main
 
 
 class NumpyArrayEncoder(JSONEncoder):
@@ -33,6 +34,7 @@ while True:
     if config_json:
         mensaje_python = json.loads(config_json)
         print("poblacion recibida... ")
+        main = get_main(mensaje_python['algorithm'])
         pob_evolucionada = main(mensaje_python)
         convierteAmensaje = json.dumps(pob_evolucionada, cls=NumpyArrayEncoder).encode('utf-8')
         r.lpush('cola_evolucionada', convierteAmensaje)
