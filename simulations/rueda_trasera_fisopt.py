@@ -12,7 +12,7 @@ KTH = 1.0   # constante de ajuste k2
 KE = 0.3    # constanste k
 Kp = 1
 
-#hacer el modelo matematico de la moto que es lo que se va a controlar
+# hacer el modelo matematico de la moto que es lo que se va a controlar
 def modelo(z, t, delta, aceleracion):
     x, y, teta, v = z
     dx_dt    = v * np.cos(teta)
@@ -279,7 +279,7 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             plt.show()
         #print(error)
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
-        print("error",error_rmse)
+        #print("error",error_rmse)
         return error_rmse,
 
 if __name__ == '__main__':

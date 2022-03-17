@@ -2,28 +2,29 @@
 import redis
 import json
 import time
+from popbuffer import PopBuffer
 
-distributed = [("GWO", 2), ("PSO", 2), ("GA", 2)]
-config = {'pop_size': 5,'cxpb':0.7, 'mutpb':0.3, 'ngen':5,
-        'smin':-0.25, 'smax':0.25,   # pso - gwo
-        'pmin': 0, 'pmax': 1,         #gwo
-        'list_size':10,
-        'phi1': 2.0, 'phi2': 2.0,   #pso
-        'controller_module':'fis5r10p',
-        'simulation':'rueda_trasera_fisopt',
-        'runs':1, 
-        'ini_min':0, 'ini_max':1,
-        'num_poblaciones':6,
-        'num_cycles':2
-        }
+distributed = ["GA", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
+# distributed = (["GWO", "PSO", "GA"], 2)
+# config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
+#         'smin':-0.25, 'smax':0.25,   # pso - gwo
+#         'pmin': 0, 'pmax': 1,         #gwo
+#         'list_size':10,
+#         'phi1': 2.0, 'phi2': 2.0,   #pso
+#         'controller_module':'fis5r10p',
+#         'simulation':'rueda_trasera_fisopt',
+#         'runs':1,
+#         'ini_min':0, 'ini_max':1,
+#         'num_poblaciones':6,
+#         'num_cycles':2
+#         }
+
 
 
 def Generador_de_poblaciones(distributed):
       # se van a ahacer 6 poblaciones iniciales
     poblaciones = []
-
-    for algorithm, num_poblaciones in distributed:
-        for i in range(num_poblaciones):
+    for i, algorithm in enumerate(distributed):
             configBasica = config.copy()
             configBasica['algorithm'] = algorithm
             configBasica['id'] = algorithm + str(i)
@@ -49,25 +50,31 @@ def Setup(config):
 
 def Combina(config):
     inicio_tiempo = time.time()
+    popBuffer = PopBuffer(key=lambda x: x['score'], size=10)
 
     num_poblaciones_recibidas = 0
     poblaciones_recibidas = []
     num_total = 0
     total_evals = 0
 
-    while True:
+    best_fitness = 5000
+    best_solution = None
 
+    while True:
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
         _, mensaje_poblacion = r.brpop('cola_evolucionada')
 
         if mensaje_poblacion:
             poblacion = json.loads(mensaje_poblacion)
             #print('Población recibida ... ')
-            num_total+=1
-            num_poblaciones_recibidas+=1
+            num_total += 1
+            num_poblaciones_recibidas += 1
             poblaciones_recibidas.append(poblacion)
-            total_evals+=poblacion['Total_num_eval']
+            total_evals += poblacion['total_num_eval']
 
+            if poblacion["best_fitness"] < best_fitness:
+                best_fitness = poblacion["best_fitness"]
+                best_solution = poblacion["best_solution"]
             #imprimir los datos
             #print(poblacion['id'], poblacion['cxpb'], poblacion['mutpb'], poblacion['Best_fitness'],poblacion['Total_num_eval'])
 
@@ -76,13 +83,16 @@ def Combina(config):
                 #print('ya son 12 poblaciones recibidas ...')
                 total_time= time.time()-inicio_tiempo
                 # imprime los resultados
-                print(total_evals/total_time, total_time, total_evals, poblacion['Best_fitness'], poblacion["algorithm"])
+                print("resultados del experimento")
+                print(total_evals/total_time, total_time, total_evals, poblacion['best_fitness'], poblacion["algorithm"])
+                print("best score:{0} best fitness {1}".format(best_fitness, best_solution))
                 break
 
+
             if num_poblaciones_recibidas == 2:
-                print('ya hay Dos poblaciones recibidas para migrar')
-                print('pop1:', poblaciones_recibidas[0]['Best_fitness'])
-                print('pop2:', poblaciones_recibidas[1]['Best_fitness'])
+                print('Ya hay Dos poblaciones recibidas para migrar')
+                print('pop1:', poblaciones_recibidas[0]['best_fitness'])
+                print('pop2:', poblaciones_recibidas[1]['best_fitness'])
 
                 # aqui se puede hacer la mezcla (suffle)
                 mensajeA = poblaciones_recibidas[0]
@@ -92,8 +102,8 @@ def Combina(config):
                 mensajeA['pop'].sort(key=lambda ind: ind['score'])
                 mensajeB['pop'].sort(key=lambda ind: ind['score'])
 
-                print(mensajeA['pop'][0:2]) # imprime los dos mejores porque estan ordenados
-                print(mensajeB['pop'][0:2])
+                # print(mensajeA['pop'][0:2]) # imprime los dos mejores porque estan ordenados
+                # print(mensajeB['pop'][0:2])
 
                 # se hace el intercambio con los mejores de cada uno
                 # los mejores dos se intercambian por los dos peores
@@ -118,7 +128,80 @@ def Combina(config):
                 num_poblaciones_recibidas = 0
                 poblaciones_recibidas = []
 
-Setup(config)
-Combina(config)
+
+def combina_buffer(config):
+    inicio_tiempo = time.time()
+    popBuffer = PopBuffer(key=lambda x: x['score'], size=5)
+
+    num_poblaciones_recibidas = 0
+    num_total = 0
+    total_evals = 0
+
+    best_fitness = 5000
+    best_solution = None
+
+    while True:
+        r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        _, mensaje_poblacion = r.brpop('cola_evolucionada')
+
+        if mensaje_poblacion:
+            poblacion = json.loads(mensaje_poblacion)
+            #print('Población recibida ... ')
+            num_total += 1
+            num_poblaciones_recibidas += 1
+            total_evals += poblacion['total_num_eval']
+
+            if poblacion["best_fitness"] < best_fitness:
+                best_fitness = poblacion["best_fitness"]
+                best_solution = poblacion["best_solution"]
+            #imprimir los datos
+            #print(poblacion['id'], poblacion['cxpb'], poblacion['mutpb'], poblacion['Best_fitness'],poblacion['Total_num_eval'])
+
+
+            if num_total == config['num_poblaciones']*config['num_cycles']:   # para salirse cuando llegue a 10 poblacioens
+                #print('ya son 12 poblaciones recibidas ...')
+                total_time= time.time()-inicio_tiempo
+                # imprime los resultados
+                print("resultados del experimento")
+                print(total_evals/total_time, total_time, total_evals, poblacion['best_fitness'], poblacion["algorithm"])
+                print("best score:{0} best fitness {1}".format(best_fitness, best_solution))
+                break
+
+            print('pop:', poblacion['best_fitness'])
+
+
+            # esta es otra manera de migrar mas elitista
+            poblacion['pop'].sort(key=lambda ind: ind['score'])
+            #print(poblacion['pop'])
+
+            # Save the best two populations to the buffer
+            for ind in poblacion['pop'][:2]:
+                popBuffer.append(ind)
+
+
+            # replace the worst two individuals with two random from the buffer
+            poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
+
+
+
+            # esta es una manera de migrar
+            # mitad = len(mensajeA['pop'])//2  #sacas la long de la pop
+
+            # mensajeA['pop'] = mensajeA['pop'][mitad:] + mensajeB['pop'][:mitad]
+            # mensajeB['pop'] = mensajeB['pop'][mitad:] + mensajeA['pop'][:mitad]
+
+            mensaje = json.dumps(poblacion).encode('utf-8')
+            r.lpush('cola_de_mensajes', mensaje)
+
+
+
+
+if __name__ == "__main__":
+    config: None
+    with open("config.json", "r") as conf_file:
+        config = json.load(conf_file)
+    Setup(config)
+    combina_buffer(config)
+ #   Combina(config)
 
 

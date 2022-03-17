@@ -38,3 +38,46 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
       REDIS_HOST: redis
+
+  worker4:
+    build: '.'
+    depends_on:
+      - redis
+      #volumes:
+      # - ./Worker:/code
+    command: python worker.py
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
+
+  worker5:
+    build: '.'
+    depends_on:
+      - redis
+      #volumes:
+      # - ./Worker:/code
+    command: python worker.py
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
+  worker6:
+    build: '.'
+    depends_on:
+      - redis
+      #volumes:
+      # - ./Worker:/code
+    command: python worker.py
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
+
+  worker7:
+    build: '.'
+    depends_on:
+      - redis
+      #volumes:
+      # - ./Worker:/code
+    command: python worker.py
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
