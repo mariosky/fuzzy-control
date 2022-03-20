@@ -11,4 +11,5 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\Activate.ps1
 ```
 
-## Modificiones
+## Docker compose
+docker-compose up --scale worker=7 --remove-orphans
