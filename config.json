@@ -1,5 +1,5 @@
 {
-     "pop_size":10,
+     "pop_size":12,
      "cxpb":0.7,
      "mutpb":0.3,
      "ngen":5,
@@ -12,6 +12,6 @@
      "runs":1,
      "ini_min":0,
      "ini_max":1,
-     "num_poblaciones":10,
-     "num_cycles":5
+     "num_poblaciones":8,
+     "num_cycles":4
 }

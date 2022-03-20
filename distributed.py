@@ -4,7 +4,7 @@ import json
 import time
 from popbuffer import PopBuffer
 
-distributed = ["GA", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
+distributed = ["PSO", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
 # distributed = (["GWO", "PSO", "GA"], 2)
 # config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
 #         'smin':-0.25, 'smax':0.25,   # pso - gwo
@@ -48,7 +48,7 @@ def Setup(config):
         mensaje = json.dumps(poblacion).encode('utf-8')
         r.lpush('cola_de_mensajes', mensaje)
 
-def Combina(config):
+def combina(config):
     inicio_tiempo = time.time()
     popBuffer = PopBuffer(key=lambda x: x['score'], size=10)
 
@@ -129,7 +129,7 @@ def Combina(config):
                 poblaciones_recibidas = []
 
 
-def combina_buffer(config):
+def combina_buffer(config, random=True):
     inicio_tiempo = time.time()
     popBuffer = PopBuffer(key=lambda x: x['score'], size=5)
 
@@ -163,11 +163,12 @@ def combina_buffer(config):
                 total_time= time.time()-inicio_tiempo
                 # imprime los resultados
                 print("resultados del experimento")
-                print(total_evals/total_time, total_time, total_evals, poblacion['best_fitness'], poblacion["algorithm"])
+
+                print(total_evals/total_time, total_time, total_evals)
                 print("best score:{0} best fitness {1}".format(best_fitness, best_solution))
                 break
 
-            print('pop:', poblacion['best_fitness'])
+            print('pop:', poblacion['best_fitness'], poblacion['algorithm'], poblacion['id'])
 
 
             # esta es otra manera de migrar mas elitista
@@ -178,9 +179,28 @@ def combina_buffer(config):
             for ind in poblacion['pop'][:2]:
                 popBuffer.append(ind)
 
+            print("original")
+
+            print('------------------------------')
+            for sol in popBuffer._list:
+                print(sol['score'])
+            print('------------------------------')
+            for sol in poblacion['pop']:
+                print(sol['score'])
+            print('------------------------------')
+
+
 
             # replace the worst two individuals with two random from the buffer
-            poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
+            # poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
+            if not random:
+                poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
+            else:
+                poblacion['pop'] = poblacion['pop'][:-2] + popBuffer.best(2)
+
+            for sol in poblacion['pop']:
+                print(sol['score'])
+            print('------------------------------')
 
 
 
@@ -201,7 +221,7 @@ if __name__ == "__main__":
     with open("config.json", "r") as conf_file:
         config = json.load(conf_file)
     Setup(config)
-    combina_buffer(config)
- #   Combina(config)
+    combina_buffer(config, random=True)
+    # combina(config)
 
 

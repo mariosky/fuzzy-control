@@ -33,7 +33,7 @@ while True:
     _, config_json = r.brpop('cola_de_mensajes') #esta configurado en json
     if config_json:
         mensaje_python = json.loads(config_json)
-        print("poblacion recibida... ", mensaje_python['algorithm'])
+        print("poblacion recibida... ", mensaje_python['algorithm'], mensaje_python['id'])
         main = get_main(mensaje_python['algorithm'])
         pob_evolucionada = main(mensaje_python)
         convierteAmensaje = json.dumps(pob_evolucionada, cls=NumpyArrayEncoder).encode('utf-8')
