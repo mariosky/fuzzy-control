@@ -88,6 +88,8 @@ def main(config):
 #        config['Tiempo_Total'] = time.time() - inicio_tiempo
     print(logbook.chapters)
 
+    pop.pop(-1)
+    pop.append(best)
     pop_regreso = alg_base.get_pop(pop)
     config = alg_base.save_config(config, time.time() - inicio_tiempo, best.fitness.values[0], best, None, pop_regreso)
     return config

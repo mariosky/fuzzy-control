@@ -9,11 +9,11 @@ class PopBuffer:
         self.reverse = reverse
 
     def append(self, data):
-        if len(self._list) >= self.size:
-            self._list.sort(key=self._key, reverse=self.reverse)
-            old_data = self._list[-1]
-            self._list.remove(old_data)
         self._list.append(data)
+        self._list.sort(key=self._key, reverse=self.reverse)
+        if len(self._list) > self.size:
+            self._list.pop(-1)
+        
         
     def random_choice(self):
         #print(self._list)

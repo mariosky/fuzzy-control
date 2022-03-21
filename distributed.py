@@ -4,7 +4,7 @@ import json
 import time
 from popbuffer import PopBuffer
 
-distributed = ["PSO", "PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
+distributed = ["PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
 # distributed = (["GWO", "PSO", "GA"], 2)
 # config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
 #         'smin':-0.25, 'smax':0.25,   # pso - gwo
@@ -165,10 +165,10 @@ def combina_buffer(config, random=True):
                 print("resultados del experimento")
 
                 print(total_evals/total_time, total_time, total_evals)
-                print("best score:{0} best fitness {1}".format(best_fitness, best_solution))
+                print("best score:{0} best solution {1}".format(best_fitness, best_solution))
                 break
 
-            print('pop:', poblacion['best_fitness'], poblacion['algorithm'], poblacion['id'])
+            print('pop:', poblacion['best_fitness'], poblacion['algorithm'], poblacion['id'], num_total)
 
 
             # esta es otra manera de migrar mas elitista
@@ -179,15 +179,14 @@ def combina_buffer(config, random=True):
             for ind in poblacion['pop'][:2]:
                 popBuffer.append(ind)
 
-            print("original")
-
-            print('------------------------------')
+            
+            print('--------- buffer ---------------------')
             for sol in popBuffer._list:
                 print(sol['score'])
-            print('------------------------------')
+            print('--------- original  ---------------------')
             for sol in poblacion['pop']:
                 print(sol['score'])
-            print('------------------------------')
+            print('--------- modificada ---------------------')
 
 
 
