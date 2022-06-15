@@ -7,20 +7,18 @@ import random
 
 import numpy
 import math
-
+import json
 from deap import base
 from deap import creator
 import time
 from deap import creator
 from deap import tools
-
 from controllers.benchmark import get_eval
-# Minimizamos
-# smin, smax velocidades máximas
-#
+import algorithms.algorithm_base as alg_base
+
 inicio_tiempo = time.time()  # te asigna el tiempo actual
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=0.5,smax=0.5, best=None)
+creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=0.5, smax=0.5, best=None)
 # pmax y pmin rango de valores que va a tomar la partícula
 # smin y smax velocidades máximas
 def generate(size, pmin, pmax, smin, smax):
@@ -55,7 +53,9 @@ def main(config):
     toolbox.register("evaluate", get_eval(config['controller_module'], config['simulation']))# parametro   get_eval(fis, px control)
     toolbox.register("population", tools.initRepeat, list, toolbox.particle)
     toolbox.register("update", updateParticle, phi1=config['phi1'], phi2=config['phi2'])
-    pop = toolbox.population(n=config['pop_size'])
+
+    # pop = toolbox.population(n=config['pop_size'])
+    alg_base.set_pop(config, toolbox, creator.Particle)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", numpy.mean)
@@ -67,6 +67,7 @@ def main(config):
     logbook.header = ["gen", "evals"] + stats.fields
 
     GEN = config['ngen']
+    pop = config['pop']
     best = None
 
     for g in range(GEN):
@@ -85,12 +86,18 @@ def main(config):
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
 #        config['Tiempo_Total'] = time.time() - inicio_tiempo
-    
- #   return best.fitness, best, Tiempo_Total
-    config['Tiempo_Total'] = time.time() - inicio_tiempo
-    config['Total_num_eval'] = config['pop_size']
-    config['Best_fitness'] = best.fitness.values[0]
-    config['Best_Particle'] = best
-    config['Estadistica_gen'] = stats.fields
-    config['pop'] = pop
+    print(logbook.chapters)
+
+    pop.pop(-1)
+    pop.append(best)
+    pop_regreso = alg_base.get_pop(pop)
+    config = alg_base.save_config(config, time.time() - inicio_tiempo, best.fitness.values[0], best, None, pop_regreso)
     return config
+
+
+if __name__ == "__main__":
+    config = None
+    with open(r"..\config.json", "r") as conf_file:
+        config = json.load(conf_file)
+    results = main(config)
+    print(results)

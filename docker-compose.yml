@@ -1,4 +1,4 @@
-version: '3' 
+version: '3'
 
 # definiciones de los servicios
 services:
@@ -17,24 +17,3 @@ services:
       PYTHONUNBUFFERED: 1
       REDIS_HOST: redis
 
-  worker2:
-    build: '.'
-    depends_on:
-      - redis
-      #volumes:
-      # - ./Worker:/code
-    command: python worker.py
-    environment:
-      PYTHONUNBUFFERED: 1
-      REDIS_HOST: redis
-
-  worker3:
-    build: '.'
-    depends_on:
-      - redis
-      #volumes:
-      # - ./Worker:/code
-    command: python worker.py
-    environment:
-      PYTHONUNBUFFERED: 1
-      REDIS_HOST: redis

@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from simulations.ruta_curvas import CubicSplinePath, Pi_2_pi
 import math
+import warnings
 
 from importlib import import_module
 
@@ -11,7 +12,7 @@ KTH = 1.0   # constante de ajuste k2
 KE = 0.3    # constanste k
 Kp = 1
 
-#hacer el modelo matematico de la moto que es lo que se va a controlar
+# hacer el modelo matematico de la moto que es lo que se va a controlar
 def modelo(z, t, delta, aceleracion):
     x, y, teta, v = z
     dx_dt    = v * np.cos(teta)
@@ -94,7 +95,7 @@ def simulacion(ruta, meta_objetivo, params, controller):
    # deltai = np.zeros(len(t))
   #  aceleracioni=np.zeros(len(t))
 
-    # llena el arreglo con estos valores en el rango de las posiciones indicadas
+   # llena el arreglo con estos valores en el rango de las posiciones indicadas
    # deltai[1:9] = .5
    # deltai[10:30] = 1
    # deltai[31:40] = -1
@@ -157,8 +158,11 @@ def simulacion(ruta, meta_objetivo, params, controller):
 
         inputs = (di, aceleracion)
 
+        z = None
         # correr el modelo
-        z=odeint(modelo, z0, [0,0.1], args=inputs)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            z=odeint(modelo, z0, [0,0.1], args=inputs)
 
         z0 = z[-1]
         x0, y0, yaw0, v0 = z0  #le asignas el ultimo valor de z que es donde estan los valores
@@ -287,8 +291,9 @@ if __name__ == '__main__':
     #prueba_simulador([0.5100006103689083, -0.41621313195522447, 0.8251985475495492, 0.4114258655863874, 0.495287507338406, 0.24805299883193144, 1.6146050014785913, 0.1643118499073945, 0.22840629626085052],controller, True)
 
     # controlador 5 funciones memb con 10 param
-   # from controllers.fis5r10p import fis_opt
-   # controller = fis_opt
-   #prueba_simulador([0.6190221005252283, 0.7468804693125494, 0.8393343791227867, 0.14847736757407515, 0.9752342996488179, -0.16865413808712387, 0.638338013088172, 0.811058207120933, -0.007083765393046837, 0.662730258868478],controller, True)
 
-    prueba_simulador(None,None,True)
+    from controllers.fis5r10p import fis_opt
+    controller = fis_opt
+    solution = [0.7895321425599207, 0.486514381925796, 0.43022274249683146, 0.6975676982390971, 0.8879391004878989, 0.9609521360233566, -0.13154647245644002, 0.367185601048029, 0.6047960207170928, 0.7793810182327733]
+    prueba_simulador(solution,controller, True)
+

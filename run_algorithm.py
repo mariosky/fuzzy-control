@@ -1,16 +1,19 @@
-from algorithms import PSO
+
 import csv
 import json
 import uuid
+from run_tools import get_main
 
-config = {'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,
+config = { 'algorithm':'HS',
+        'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,
         'pmin': 0, 'pmax': 1,
         'list_size':10,     #numero de particulas
         'controller_module':'fis5r10p',
         'simulation': 'rueda_trasera_fisopt',
-        'runs':1,
-        'phi1': 2.0, 'phi2': 2.0
+        'runs':10
         }
+
+main = get_main(config['algorithm'])
 
 #print(PSO.main(config))
 
@@ -21,19 +24,19 @@ with open("./results/{}-{}_config.json".format(config['controller_module'], expe
    json.dump(config, outfile)
 
 for i in range(config['runs']):
-   print("      run {}".format(i))
-   result= PSO.main(config.copy())
+   print("      run {}-{}".format(i, config['algorithm']))
+   result= main(config.copy())
 
-   results.append((result['best_fitness'], result['best_solution'], result['tiempo_total'],result['total_num_eval']))
+   results.append((result['Best_fitness'], result['Best_Particle'], result['Tiempo_Total'],result['Total_num_eval']))
    
-   with open('./results/temp_results.csv'.format(config['controller_module'], experiment_id),'a') as out:
+   with open('./results/{}-temp_results-{}-{}.csv'.format(config['algorithm'],config['controller_module'], experiment_id),'a') as out:
       csv_out=csv.writer(out)
-      csv_out.writerow(['best fitness','solution','time', 'evals'])
+      csv_out.writerow(['best fitness','particula','tiempo', 'evals'])
       for row in results:
           csv_out.writerow(row)
 
 with open('./results/{}-{}_results.csv'.format(config['controller_module'], experiment_id),'w') as out:
    csv_out=csv.writer(out)
-   csv_out.writerow(['best fitness','solution','time', 'evals'])
+   csv_out.writerow(['best fitness','particula','tiempo', 'evals'])
    for row in results:
        csv_out.writerow(row)
