@@ -17,13 +17,15 @@ def fis_opt(e_teta, error, params=[], grafica=False):
     #print(params,e_teta, error)
     #factor_apertura = 1.3
 
-    x_e_teta = np.arange(-100, 100, 0.5)
-    x_error  = np.arange(-100, 100, 0.5)
-    x_omega  = np.arange(-100, 100, 0.5)
+#para ejecutar
+    # x_e_teta = np.arange(-100, 100, 0.5)
+    # x_error  = np.arange(-100, 100, 0.5)
+    # x_omega  = np.arange(-100, 100, 0.5)
 
-    #x_e_teta = np.arange(-3, 3, 0.05)
-    #x_error = np.arange(-3, 3, 0.05)
-    #x_omega = np.arange(-3, 3, 0.05)
+#para imprimir en un rango que se vea bien
+    x_e_teta = np.arange(-3, 3, 0.05)
+    x_error  = np.arange(-3, 3, 0.05)
+    x_omega  = np.arange(-3, 3, 0.05)
 
     # estas son las 5 funciones de membresia con parametros fijos
 
@@ -78,27 +80,27 @@ def fis_opt(e_teta, error, params=[], grafica=False):
         # Visualize these universes and membership functions
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, figsize=(8, 9))
 
-        ax0.plot(x_e_teta, e_teta_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax0.plot(x_e_teta, e_teta_med_neg, 'm', linewidth=1.5, label='Medio negativo')
-        ax0.plot(x_e_teta, e_teta_lo, 'g', linewidth=1.5, label='Bajo')
-        ax0.plot(x_e_teta, e_teta_med_pos, 'k', linewidth=1.5, label='Medio positivo')
-        ax0.plot(x_e_teta, e_teta_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
-        ax0.set_title('Error Theta')
+        ax0.plot(x_e_teta, e_teta_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax0.plot(x_e_teta, e_teta_med_neg, 'm', linewidth=1.5, label='Medium Negative')
+        ax0.plot(x_e_teta, e_teta_lo, 'g', linewidth=1.5, label='Low')
+        ax0.plot(x_e_teta, e_teta_med_pos, 'k', linewidth=1.5, label='Medium Positive')
+        ax0.plot(x_e_teta, e_teta_hi_pos, 'r', linewidth=1.5, label='High Positive')
+        ax0.set_title('Theta Error')
         ax0.legend()
 
-        ax1.plot(x_error, error_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax1.plot(x_error, error_med_neg, 'm', linewidth=1.5, label='Medio negativo')
-        ax1.plot(x_error, error_lo, 'g', linewidth=1.5, label='Bajo')
-        ax1.plot(x_error, error_med_pos, 'k', linewidth=1.5, label='Medio positivo')
-        ax1.plot(x_error, error_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
+        ax1.plot(x_error, error_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax1.plot(x_error, error_med_neg, 'm', linewidth=1.5, label='Medium Negative')
+        ax1.plot(x_error, error_lo, 'g', linewidth=1.5, label='Low')
+        ax1.plot(x_error, error_med_pos, 'k', linewidth=1.5, label='Medium Positive')
+        ax1.plot(x_error, error_hi_pos, 'r', linewidth=1.5, label='High Positive')
         ax1.set_title('Error')
         ax1.legend()
 
-        ax2.plot(x_omega, omega_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax2.plot(x_omega, omega_med_neg, 'm', linewidth=1.5, label='Medio negativo')
-        ax2.plot(x_omega, omega_lo, 'g', linewidth=1.5, label='Bajo')
-        ax2.plot(x_omega, omega_med_pos, 'k', linewidth=1.5, label='Medio positivo')
-        ax2.plot(x_omega, omega_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
+        ax2.plot(x_omega, omega_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax2.plot(x_omega, omega_med_neg, 'm', linewidth=1.5, label='Medium Negative')
+        ax2.plot(x_omega, omega_lo, 'g', linewidth=1.5, label='Low')
+        ax2.plot(x_omega, omega_med_pos, 'k', linewidth=1.5, label='Medium Positive')
+        ax2.plot(x_omega, omega_hi_pos, 'r', linewidth=1.5, label='High Positive')
         ax2.set_title('Omega')
         ax2.legend()
 
@@ -207,9 +209,24 @@ if __name__ == '__main__':
     #omega= fis_opt(1.0572916680894755 ,-0.92007166,[0.19590043465383156, 0.7167493393335032, 0.9350616308752682, 0.2737485279962393, 0.9197640201658847, 0.9344545773709528, 0.2746576593220633, 0.662691565472217],True)
     #omega = fis_opt( -0.8579203417523265, -2.02587306, [0.6158061060468809, 0.4832258519402056, 0.7864552296026883, 0.5862045721640615, 0.6798355710879616, 0.386040327866486, 0.6634239215587792, 0.38294084619747026], True)
     #print(omega) ## debe imprimir -1.5385706528567843e-17
-    omega = fis_opt(-1.053091629254558,4.5266952810876880,
-                    [0.8959158028155084, 0.658995053052556, 0.676739138745285, 0.559788140918265, 1.0342303561818451,
-                     -0.06451794622238155, 0.4669683430430709, 0.6595549547377009, 0.5788390726539321,
-                     1.1403916447411557]
-                    ,True)
+    # omega = fis_opt(-1.053091629254558,4.5266952810876880,
+    #                 [0.8959158028155084, 0.658995053052556, 0.676739138745285, 0.559788140918265, 1.0342303561818451,
+    #                  -0.06451794622238155, 0.4669683430430709, 0.6595549547377009, 0.5788390726539321,
+    #                  1.1403916447411557]
+    #                 ,True)
+# 3 rutas 1 run
+    #omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.6881861532057111, 0.5457448973128567, 0.5723039842700184, 0.6001036797687085, 0.04057655023654805, 0.5094865792264195, 0.2815259801458134, 0.5195350137872634, 0.21241711628339266, 0.3282393980572259],True)
+    #print(omega)  #-1.8474310015697064e-17
+#1 rutas 30 run
+    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.9138348214760559, 0.7795355455660611, 0.6263238396126122, 0.1833518550794404, 0.9889695810272094, 0.36212637272203946, 0.07367085357870862, 0.3171646013336108, 0.708979350424621, 0.551215269830756], True)
+   # print (omega)  # -1.1082081193450236e-17
 
+#3 rutas 30 run GA
+   # omega = fis_opt(-1.053091629254558, 4.5266952810876880,[0.6605668026466178, 0.8664984490251894, 0.875345580029395, 0.9778652398664412, 0.7041133284116069, 0.6630561904113547, 0.45928949106264866, 0.663308172743631, 0.8895939030771416, 0.8903835377068903], True)
+    #print (omega)  #-1.2099039194234389e-17
+
+# 3 rutas 30 corridas PSO
+#    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.7895321425599207, 0.486514381925796, 0.43022274249683146, 0.6975676982390971, 0.8879391004878989, 0.9609521360233566, -0.13154647245644002, 0.367185601048029, 0.6047960207170928, 0.7793810182327733],True)
+
+# 3 rutas 30 corridas GWO
+#    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.7460691683574506, 0.4660461861022161, 0.49463482209209514, 0.5928182723868609, 0.40482951103167825, 0.4001964480544798, 0.11481445821967314, 0.3642146026168225, 0.30047196537980836, 0.5328154351161231],True)

@@ -44,21 +44,21 @@ def fis_opt(e_teta, error, params=[], grafica=False):
     if grafica:
         # Visualize these universes and membership functions
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, figsize=(8, 9))
-        ax0.plot(x_e_teta, e_teta_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax0.plot(x_e_teta, e_teta_lo, 'g', linewidth=1.5, label='Bajo')
-        ax0.plot(x_e_teta, e_teta_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
-        ax0.set_title('Error Theta')
+        ax0.plot(x_e_teta, e_teta_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax0.plot(x_e_teta, e_teta_lo, 'g', linewidth=1.5, label='Low')
+        ax0.plot(x_e_teta, e_teta_hi_pos, 'r', linewidth=1.5, label='High Positive')
+        ax0.set_title('Theta Error ')
         ax0.legend()
 
-        ax1.plot(x_error, error_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax1.plot(x_error, error_lo, 'g', linewidth=1.5, label='Bajo')
-        ax1.plot(x_error, error_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
+        ax1.plot(x_error, error_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax1.plot(x_error, error_lo, 'g', linewidth=1.5, label='Low')
+        ax1.plot(x_error, error_hi_pos, 'r', linewidth=1.5, label='High Positive')
         ax1.set_title('Error')
         ax1.legend()
 
-        ax2.plot(x_omega, omega_hi_neg, 'b', linewidth=1.5, label='Alto negativo')
-        ax2.plot(x_omega, omega_lo, 'g', linewidth=1.5, label='Bajo')
-        ax2.plot(x_omega, omega_hi_pos, 'r', linewidth=1.5, label='Alto positivo')
+        ax2.plot(x_omega, omega_hi_neg, 'b', linewidth=1.5, label='High Negative')
+        ax2.plot(x_omega, omega_lo, 'g', linewidth=1.5, label='Low')
+        ax2.plot(x_omega, omega_hi_pos, 'r', linewidth=1.5, label='High Positive')
         ax2.set_title('Omega')
         ax2.legend()
 
@@ -147,7 +147,12 @@ def fis_opt(e_teta, error, params=[], grafica=False):
     return omega
 
 if __name__ == '__main__':
-    omega = fis_opt(-1.0225139922075002, -1.5029882118831652,
-                    [1.9163557598542487, 1.4883474506921146, 1.3300234932967865, 1.156546185903572, 1.2138842932024942, 1.2321202981094674, 2.066694644154459, 1.0049411116024505, 0.013429957058468493]
-                    ,True)
-    print(omega) ## debe imprimir 3.743589743589744
+    omega = fis_opt(-1.0225139922075002, -1.5029882118831652,[0.39011121631048107, 0.28163671651108224, 0.6847453826163694, 0.41952512043399315, 0.38890729661766127, 0.2953420310328508, 1.4807845479669037, -0.13027935064925075, -0.1136102500769744] ,True)
+    print(omega) ## debe imprimir 4.674935400516751  3rutas 30 run
+
+    #omega = fis_opt(-1.0225139922075002, -1.5029882118831652,[0.5100006103689083, -0.41621313195522447, 0.8251985475495492, 0.4114258655863874, 0.495287507338406, 0.24805299883193144, 1.6146050014785913, 0.1643118499073945, 0.22840629626085052],True)
+    #print(omega) ## imprime  4.713981789709031 ruta m 30 run
+    # omega = fis_opt(-1.0225139922075002, -1.5029882118831652,
+    #                 [0.7014962628199143, 0.3359801314341685, 0.7581374371596741, 0.22780961348069695,
+    #                  0.3017100840641146, 0.17879547015910924, 0.7921733392927478, 0.21027123814034726, 0.047194082104890844], True)
+    # print(omega)  ## imprime  4.292279076899141 3ruta m 1 run

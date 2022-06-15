@@ -201,9 +201,11 @@ def prueba_simulador(params, controller, grafica=False):
 
         error_ruta =  rutas(ax, ay, params, controller, grafica)
 
+
         suma_error += error_ruta[0]
 
     fit_ruta = suma_error/float(len(lista_rutas))
+    print(fit_ruta)
     return fit_ruta,
 
 
@@ -275,7 +277,7 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             plt.show()
         #print(error)
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
-        #print("error",error_rmse)
+        print("error",error_rmse)
         return error_rmse,
 
 if __name__ == '__main__':
@@ -285,7 +287,8 @@ if __name__ == '__main__':
     #prueba_simulador([0.5100006103689083, -0.41621313195522447, 0.8251985475495492, 0.4114258655863874, 0.495287507338406, 0.24805299883193144, 1.6146050014785913, 0.1643118499073945, 0.22840629626085052],controller, True)
 
     # controlador 5 funciones memb con 10 param
-    from controllers.fis5r10p import fis_opt
-    controller = fis_opt
-    prueba_simulador([0.6190221005252283, 0.7468804693125494, 0.8393343791227867, 0.14847736757407515, 0.9752342996488179, -0.16865413808712387, 0.638338013088172, 0.811058207120933, -0.007083765393046837, 0.662730258868478],controller, True)
+   # from controllers.fis5r10p import fis_opt
+   # controller = fis_opt
+   #prueba_simulador([0.6190221005252283, 0.7468804693125494, 0.8393343791227867, 0.14847736757407515, 0.9752342996488179, -0.16865413808712387, 0.638338013088172, 0.811058207120933, -0.007083765393046837, 0.662730258868478],controller, True)
 
+    prueba_simulador(None,None,True)
