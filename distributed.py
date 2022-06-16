@@ -21,6 +21,17 @@ distributed = ["PSO", "GA", "PSO"]
 #         'num_cycles':2
 #         }
 
+#metodo para imprimir datos de configuracion de cada algoritmo
+def Imprime_Config(poblaciones):
+
+    for pob in poblaciones:
+        #imprime toda la config
+#       print(pob)
+        #imprime en lista toda la info requerida
+        print("\n {0}".format(pob["id"]))
+       #print(pob["params"][pob["algorithm"]])
+        for parametro in pob["params"][pob["algorithm"]]:
+            print("{0}: {1:.4f}".format(parametro,pob[parametro]))
 
 
 def Generador_de_poblaciones(distributed):
@@ -29,12 +40,13 @@ def Generador_de_poblaciones(distributed):
     for i, algorithm in enumerate(distributed):
             configBasica = config.copy()
             configBasica['algorithm'] = algorithm
-            configBasica['id'] = algorithm + str(i)
+            configBasica['id'] = algorithm + "-"+ str(i)
             for llave in configBasica:
                 if(type(configBasica[llave])==list):
                     configBasica[llave]=random.uniform(configBasica[llave][0],configBasica[llave][1])
             poblaciones.append(configBasica)
-          # imprimir la lista de config llamar al metodo
+
+
     return poblaciones
 
 
@@ -49,8 +61,14 @@ def Setup(config):
             print("waiting for redis")
             time.sleep(3)
 
+    # generar las poblaciones
+    poblaciones=Generador_de_poblaciones(distributed)
+
+    # imprimir la lista de config llamar al metodo
+    Imprime_Config(poblaciones)
+
     #enviamos las 5 poblaciones, lo vamos a hacer varias veces (for)
-    for poblacion in Generador_de_poblaciones(distributed):
+    for poblacion in poblaciones:
         mensaje = json.dumps(poblacion).encode('utf-8')
         r.lpush('cola_de_mensajes', mensaje)
 

@@ -1,4 +1,10 @@
-{
+{ "params":
+     {
+     "GA" : ["cxpb","mutpb"],
+     "PSO": ["smin","smax","pmin", "pmax","phi1","phi2"],
+     "GWO": ["phi1","phi2"]
+     },
+
      "pop_size":9,
      "cxpb":[0.3,0.9],
      "mutpb":[0.1,0.3],
