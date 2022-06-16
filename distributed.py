@@ -1,10 +1,12 @@
 # hacer al que inicia el experimento y ver como avanza y mezclando poblaciones
+import random
+
 import redis
 import json
 import time
 from popbuffer import PopBuffer
 
-distributed = ["PSO", "GA", "PSO", "GA", "PSO", "GA", "PSO"]
+distributed = ["PSO", "GA", "PSO"]
 # distributed = (["GWO", "PSO", "GA"], 2)
 # config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
 #         'smin':-0.25, 'smax':0.25,   # pso - gwo
@@ -28,7 +30,11 @@ def Generador_de_poblaciones(distributed):
             configBasica = config.copy()
             configBasica['algorithm'] = algorithm
             configBasica['id'] = algorithm + str(i)
+            for llave in configBasica:
+                if(type(configBasica[llave])==list):
+                    configBasica[llave]=random.uniform(configBasica[llave][0],configBasica[llave][1])
             poblaciones.append(configBasica)
+          # imprimir la lista de config llamar al metodo
     return poblaciones
 
 
@@ -147,6 +153,8 @@ def combina_buffer(config, random=True):
         if mensaje_poblacion:
             poblacion = json.loads(mensaje_poblacion)
             #print('Población recibida ... ')
+            #print(poblacion)
+
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion['total_num_eval']

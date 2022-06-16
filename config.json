@@ -1,8 +1,8 @@
 {
      "pop_size":9,
-     "cxpb":0.7,
-     "mutpb":0.3,
-     "ngen":4,
+     "cxpb":[0.3,0.9],
+     "mutpb":[0.1,0.3],
+     "ngen":2,
      "smin":-0.25, "smax":0.25,
      "pmin": 0, "pmax": 1,
      "list_size":10,
@@ -12,6 +12,6 @@
      "runs":1,
      "ini_min":0,
      "ini_max":1,
-     "num_poblaciones":7,
+     "num_poblaciones":3,
      "num_cycles":4
 }
