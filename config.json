@@ -4,12 +4,12 @@
      "PSO": ["smin","smax","pmin", "pmax","phi1","phi2"],
      "GWO": ["phi1","phi2"]
      },
-
+     "strategies": ["PSO", "GA", "PSO"],
      "pop_size":9,
      "cxpb":[0.3,0.9],
-     "mutpb":[0.1,0.3],
+     "mutpb":[0.1,0.5],
      "ngen":2,
-     "smin":-0.25, "smax":0.25,
+     "smin":-0.25, "smax": 0.25,
      "pmin": 0, "pmax": 1,
      "list_size":10,
      "phi1": 2.0, "phi2": 2.0,

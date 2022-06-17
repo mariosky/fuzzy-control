@@ -6,7 +6,7 @@ import json
 import time
 from popbuffer import PopBuffer
 
-distributed = ["PSO", "GA", "PSO"]
+#distributed = ["PSO", "GA", "PSO"]
 # distributed = (["GWO", "PSO", "GA"], 2)
 # config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
 #         'smin':-0.25, 'smax':0.25,   # pso - gwo
@@ -34,15 +34,15 @@ def Imprime_Config(poblaciones):
             print("{0}: {1:.4f}".format(parametro,pob[parametro]))
 
 
-def Generador_de_poblaciones(distributed):
+def Generador_de_poblaciones(strategies):
       # se van a ahacer 6 poblaciones iniciales
     poblaciones = []
-    for i, algorithm in enumerate(distributed):
+    for i, algorithm in enumerate(strategies):
             configBasica = config.copy()
             configBasica['algorithm'] = algorithm
-            configBasica['id'] = algorithm + "-"+ str(i)
-            for llave in configBasica:
-                if(type(configBasica[llave])==list):
+            configBasica['id'] = algorithm + "-" + str(i)
+            for llave in configBasica:    #para sacar un valor aleatorio del rango
+                if(type(configBasica[llave])==list and type(configBasica[llave][0])==float):
                     configBasica[llave]=random.uniform(configBasica[llave][0],configBasica[llave][1])
             poblaciones.append(configBasica)
 
@@ -62,7 +62,7 @@ def Setup(config):
             time.sleep(3)
 
     # generar las poblaciones
-    poblaciones=Generador_de_poblaciones(distributed)
+    poblaciones=Generador_de_poblaciones(config["strategies"])
 
     # imprimir la lista de config llamar al metodo
     Imprime_Config(poblaciones)
@@ -205,17 +205,15 @@ def combina_buffer(config, random=True):
             for ind in poblacion['pop'][:2]:
                 popBuffer.append(ind)
 
-            
-            print('--------- buffer ---------------------')
-            for sol in popBuffer._list:
-                print(sol['score'])
             print('--------- original  ---------------------')
             for sol in poblacion['pop']:
                 print(sol['score'])
+
+            print('--------- buffer ---------------------')
+            for sol in popBuffer._list:
+                print(sol['score'])
+
             print('--------- modificada ---------------------')
-
-
-
             # replace the worst two individuals with two random from the buffer
             # poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
             if not random:
