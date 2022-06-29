@@ -16,6 +16,7 @@ from deap import tools
 
 from copy import deepcopy
 from controllers.benchmark import get_eval
+import algorithms.algorithm_base as alg_base
 
 # Minimizamos
 # smin, smax velocidades máximas
@@ -51,7 +52,8 @@ def main(config):
                                           config['simulation']))  # parametro   get_eval(fis, px control)
     toolbox.register("population", tools.initRepeat, list, toolbox.particle)
     #toolbox.register("update", updateParticle, phi1=config['phi1'], phi2=config['phi2'])
-    pop = toolbox.population(n=config['pop_size'])
+    #pop = toolbox.population(n=config['pop_size'])
+    alg_base.set_pop(config, toolbox, creator.Particle)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", np.mean)
@@ -61,7 +63,8 @@ def main(config):
 
     logbook = tools.Logbook()
     logbook.header = ["gen", "evals"] + stats.fields
-
+    
+    pop = config['pop']
     GEN = config['ngen']
     best = None
     # Update fitness population
@@ -78,7 +81,6 @@ def main(config):
 
 
     for g in range(GEN):
-
         g += 1
         # linearly decreased from 2 to 0
         a = 2 - 2 * g / (GEN - 1)
@@ -127,12 +129,9 @@ def main(config):
     #        config['Tiempo_Total'] = time.time() - inicio_tiempo
 
     #   return best.fitness, best, Tiempo_Total
-    config['Tiempo_Total'] = time.time() - inicio_tiempo
-    config['Total_num_eval'] = total_evals
-    config['Best_fitness'] = best.fitness.values[0]
-    config['Best_Particle'] = best
-    config['Estadistica_gen'] = stats.fields
-    config['pop'] = pop
+    pop_regreso = alg_base.get_pop(pop)
+    config = alg_base.save_config(config, time.time()-inicio_tiempo, 
+                                  best.fitness.values[0], best, None, pop_regreso)
     return config
 
 

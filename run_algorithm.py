@@ -4,13 +4,13 @@ import json
 import uuid
 from run_tools import get_main
 
-config = { 'algorithm':'HS',
+config = { 'algorithm':'PSO',
         'pop_size': 50,'ngen':20, 'smin':-0.25, 'smax':0.25,
         'pmin': 0, 'pmax': 1,
         'list_size':10,     #numero de particulas
         'controller_module':'fis5r10p',
         'simulation': 'rueda_trasera_fisopt',
-        'runs':10
+        'runs':1
         }
 
 main = get_main(config['algorithm'])
