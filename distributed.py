@@ -153,7 +153,7 @@ def combina(config):
                 poblaciones_recibidas = []
 
 
-def combina_buffer(config, random=True):
+def combina_buffer(config, random=False):
     inicio_tiempo = time.time()
     popBuffer = PopBuffer(key=lambda x: x['score'], size=5)
 
@@ -216,7 +216,7 @@ def combina_buffer(config, random=True):
             print('--------- modificada ---------------------')
             # replace the worst two individuals with two random from the buffer
             # poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
-            if not random:
+            if random:
                 poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
             else:
                 poblacion['pop'] = poblacion['pop'][:-2] + popBuffer.best(2)
@@ -244,7 +244,8 @@ if __name__ == "__main__":
     with open("config.json", "r") as conf_file:
         config = json.load(conf_file)
     Setup(config)
-    combina_buffer(config, random=True)
+    combina_buffer(config, random=False) # False Best, True Random
+    # Cruce:
     # combina(config)
 
 
