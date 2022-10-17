@@ -4,7 +4,7 @@
      "PSO": ["smin","smax","pmin", "pmax","phi1","phi2"],
      "GWO": ["a"]
      },
-     "strategies": ["GWO", "GWO", "GWO","GWO", "GWO", "GWO","GWO"],
+     "strategies": ["PSO", "GWO", "PSO","GWO", "PSO", "GWO","PSO"],
      "pop_size":9,
      "cxpb":[0.3,0.9],
      "mutpb":[0.1,0.5],
