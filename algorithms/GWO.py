@@ -41,6 +41,8 @@ def get_best_solutions(pop, k=3):
     return deepcopy(pop[:k])
 
 
+def get_a(a, g, GEN):
+    return a - a * g / (GEN - 1)
 
 def main(config):
     size = config['list_size']
@@ -83,7 +85,7 @@ def main(config):
     for g in range(GEN):
         g += 1
         # linearly decreased from 2 to 0
-        a = 2 - 2 * g / (GEN - 1)
+        a = get_a(config['a'], g, GEN)
         list_best = list(map(np.array, get_best_solutions(pop, k=3)))
 
 

@@ -1,18 +1,19 @@
-{ "params":
+{"params":
      {
      "GA" : ["cxpb","mutpb"],
      "PSO": ["smin","smax","pmin", "pmax","phi1","phi2"],
-     "GWO": ["phi1","phi2"]
+     "GWO": ["a"]
      },
-     "strategies": ["GA", "GA", "GA","GA", "GA", "GA","GA"],
+     "strategies": ["PSO", "GWO", "PSO","GWO", "PSO", "GWO","PSO"],
      "pop_size":9,
      "cxpb":[0.3,0.9],
      "mutpb":[0.1,0.5],
      "ngen":4,
-     "smin":-0.25, "smax": 0.25,
+     "smin":[-0.20,-0.30], "smax": [0.20,0.30],
      "pmin": 0, "pmax": 1,
+     "a": [1.0, 2.0],
      "list_size":10,
-     "phi1": 2.0, "phi2": 2.0,
+     "phi1": [1.0,2.0], "phi2":[1.0,2.0],
      "controller_module":"fis5r10p",
      "simulation":"rueda_trasera_fisopt",
      "runs":1,
