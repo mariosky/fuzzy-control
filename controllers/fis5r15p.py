@@ -19,14 +19,14 @@ def fis_opt(e_theta, error, params, grafica=False):
     # factor_apertura = 1.3
 
     # para ejecutar
-    #x_e_theta = np.arange(-100, 100, 0.5)
-    #x_error = np.arange(-100, 100, 0.5)
-    #x_omega = np.arange(-100, 100, 0.5)
+    x_e_theta = np.arange(-100, 100, 0.5)
+    x_error = np.arange(-100, 100, 0.5)
+    x_omega = np.arange(-100, 100, 0.5)
 
     # para imprimir en un rango que se vea bien
-    x_e_theta = np.arange(-3, 3, 0.05)
-    x_error = np.arange(-3, 3, 0.05)
-    x_omega = np.arange(-3, 3, 0.05)
+    #x_e_theta = np.arange(-3, 3, 0.05)
+    #x_error = np.arange(-3, 3, 0.05)
+    #x_omega = np.arange(-3, 3, 0.05)
 
     # estas son las 5 funciones de membresia con parametros fijos
 
@@ -67,7 +67,7 @@ def fis_opt(e_theta, error, params, grafica=False):
     omega_hi_neg = fuzz.trapmf(x_omega,  [-50, -5, -l, -l+m])
     omega_med_neg = fuzz.trimf(x_omega,   [-n-o, -n, -n+o])
     omega_lo = fuzz.trimf(x_omega,   [-k, 0, k])
-    omega_med_pos = fuzz.trimf(x_omega,  [-n-o, n, n+o])
+    omega_med_pos = fuzz.trimf(x_omega,  [n-o, n, n+o])
     omega_hi_pos = fuzz.trapmf(x_omega, [l-m, l, 5, 50])
 
     # We need the activation of our fuzzy membership functions at these values.
