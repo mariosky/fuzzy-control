@@ -14,19 +14,19 @@ def factor(valor, minimum, maximum):
 
 
 def fis_opt(e_theta, error, params, grafica=False):
-    a, b, c, d, e, f, g, h, i, j = list(map(abs, params))
+    a, b, c, d, e, f, g, h, i, j, k, l, m, n, o = list(map(abs, params))
     # print(params,e_theta, error)
     # factor_apertura = 1.3
 
     # para ejecutar
-    x_e_theta = np.arange(-100, 100, 0.5)
-    x_error = np.arange(-100, 100, 0.5)
-    x_omega = np.arange(-100, 100, 0.5)
+    #x_e_theta = np.arange(-100, 100, 0.5)
+    #x_error = np.arange(-100, 100, 0.5)
+    #x_omega = np.arange(-100, 100, 0.5)
 
     # para imprimir en un rango que se vea bien
-    # x_e_theta = np.arange(-3, 3, 0.05)
-    # x_error = np.arange(-3, 3, 0.05)
-    # x_omega = np.arange(-3, 3, 0.05)
+    x_e_theta = np.arange(-3, 3, 0.05)
+    x_error = np.arange(-3, 3, 0.05)
+    x_omega = np.arange(-3, 3, 0.05)
 
     # estas son las 5 funciones de membresia con parametros fijos
 
@@ -43,6 +43,13 @@ def fis_opt(e_theta, error, params, grafica=False):
     i = factor(i, 0.5, 1.5)  # (.5 , 1.5)
     j = factor(j, 0, 1)      # (0, 1)
 
+    #se agregaron parametros en variable salida
+    k = factor(k, 0, 1)      # (0,1)
+    l = factor(l, 0.5, 2)    # (-2,0.5)
+    m = factor(m, 0, 2)      # (0, 2)
+    n = factor(n, 0.5, 1.5)  # (.5 , 1.5)
+    o = factor(o, 0, 1)      # (0, 1)
+
     # print(a, b, c, d, e, f, g, h,i , j)
     # Generate fuzzy membership functions trapezoidal y triangular
     e_theta_hi_neg = fuzz.trapmf(x_e_theta, [-50, -5, -b, -b+c])
@@ -57,11 +64,11 @@ def fis_opt(e_theta, error, params, grafica=False):
     error_med_pos = fuzz.trimf(x_error, [i-j, i, i+j])
     error_hi_pos = fuzz.trapmf(x_error, [g-h, g, 5, 50])
 
-    omega_hi_neg = fuzz.trapmf(x_omega,  [-50, -5, -1, -0.5])
-    omega_med_neg = fuzz.trimf(x_omega,   [-1, -0.5, -0])
-    omega_lo = fuzz.trimf(x_omega,   [-0.5, 0, 0.5])
-    omega_med_pos = fuzz.trimf(x_omega,  [0, 0.5, 1])
-    omega_hi_pos = fuzz.trapmf(x_omega, [0.5, 1, 5, 50])
+    omega_hi_neg = fuzz.trapmf(x_omega,  [-50, -5, -l, -l+m])
+    omega_med_neg = fuzz.trimf(x_omega,   [-n-o, -n, -n+o])
+    omega_lo = fuzz.trimf(x_omega,   [-k, 0, k])
+    omega_med_pos = fuzz.trimf(x_omega,  [-n-o, n, n+o])
+    omega_hi_pos = fuzz.trapmf(x_omega, [l-m, l, 5, 50])
 
     # We need the activation of our fuzzy membership functions at these values.
     # This is what fuzz.interp_membership exists for!
@@ -88,7 +95,6 @@ def fis_opt(e_theta, error, params, grafica=False):
         ax0.plot(x_e_theta, e_theta_med_pos, 'k', linewidth=1.5, label='Medium Positive')
         ax0.plot(x_e_theta, e_theta_hi_pos, 'r', linewidth=1.5, label='High Positive')
         ax0.set_title('Theta Error')
-
         ax0.legend()
 
         ax1.plot(x_error, error_hi_neg, 'b', linewidth=1.5, label='High Negative')
@@ -219,7 +225,7 @@ if __name__ == '__main__':
     #omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.6881861532057111, 0.5457448973128567, 0.5723039842700184, 0.6001036797687085, 0.04057655023654805, 0.5094865792264195, 0.2815259801458134, 0.5195350137872634, 0.21241711628339266, 0.3282393980572259],True)
     #print(omega)  #-1.8474310015697064e-17
 #1 rutas 30 run
-    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.9138348214760559, 0.7795355455660611, 0.6263238396126122, 0.1833518550794404, 0.9889695810272094, 0.36212637272203946, 0.07367085357870862, 0.3171646013336108, 0.708979350424621, 0.551215269830756], True)
+   # omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.9138348214760559, 0.7795355455660611, 0.6263238396126122, 0.1833518550794404, 0.9889695810272094, 0.36212637272203946, 0.07367085357870862, 0.3171646013336108, 0.708979350424621, 0.551215269830756], True)
    # print (omega)  # -1.1082081193450236e-17
 
 #3 rutas 30 run GA
@@ -231,4 +237,7 @@ if __name__ == '__main__':
 
 # 3 rutas 30 corridas GWO
 #    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.7460691683574506, 0.4660461861022161, 0.49463482209209514, 0.5928182723868609, 0.40482951103167825, 0.4001964480544798, 0.11481445821967314, 0.3642146026168225, 0.30047196537980836, 0.5328154351161231],True)
+
+# prueba agregando parametros para la salida
+    omega = fis_opt(-1.053091629254558,4.5266952810876880,[0.7895321425599207, 0.486514381925796, 0.43022274249683146, 0.6975676982390971, 0.8879391004878989, 0.9609521360233566, -0.13154647245644002, 0.367185601048029, 0.6047960207170928, 0.7793810182327733,0.8879391004878989, 0.9609521360233566, -0.13154647245644002,0.6047960207170928, 0.7793810182327733],True)
 
