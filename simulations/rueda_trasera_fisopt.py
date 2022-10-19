@@ -146,7 +146,8 @@ def simulacion(ruta, meta_objetivo, params, controller):
 
         try:
             di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
-        except :
+        except Exception as ex:
+            #print(ex, controller, params)
             error_flag = True
             break
 

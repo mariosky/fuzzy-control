@@ -12,7 +12,7 @@
      "smin":[-0.20,-0.30], "smax": [0.20,0.30],
      "pmin": 0, "pmax": 1,
      "a": [1.0, 2.0],
-     "list_size":10,
+     "list_size":15,
      "phi1": [1.0,2.0], "phi2":[1.0,2.0],
      "controller_module":"fis5r15p",
      "simulation":"rueda_trasera_fisopt",
