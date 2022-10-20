@@ -6,21 +6,6 @@ import json
 import time
 from popbuffer import PopBuffer
 
-#distributed = ["PSO", "GA", "PSO"]
-# distributed = (["GWO", "PSO", "GA"], 2)
-# config = {'pop_size':5,'cxpb':0.7, 'mutpb':0.3, 'ngen':2,
-#         'smin':-0.25, 'smax':0.25,   # pso - gwo
-#         'pmin': 0, 'pmax': 1,         #gwo
-#         'list_size':10,
-#         'phi1': 2.0, 'phi2': 2.0,   #pso
-#         'controller_module':'fis5r10p',
-#         'simulation':'rueda_trasera_fisopt',
-#         'runs':1,
-#         'ini_min':0, 'ini_max':1,
-#         'num_poblaciones':6,
-#         'num_cycles':2
-#         }
-
 #metodo para imprimir datos de configuracion de cada algoritmo
 def Imprime_Config(poblaciones):
 
@@ -45,7 +30,6 @@ def Generador_de_poblaciones(strategies):
                 if(type(configBasica[llave])==list and type(configBasica[llave][0])==float):
                     configBasica[llave]=random.uniform(configBasica[llave][0],configBasica[llave][1])
             poblaciones.append(configBasica)
-
 
     return poblaciones
 
@@ -153,7 +137,7 @@ def combina(config):
                 poblaciones_recibidas = []
 
 
-def combina_buffer(config, random=False):
+def combina_buffer(config, random=False, uniqueBuffer=False):
     inicio_tiempo = time.time()
     popBuffer = PopBuffer(key=lambda x: x['score'], size=5)
 
@@ -203,7 +187,11 @@ def combina_buffer(config, random=False):
 
             # Save the best two populations to the buffer
             for ind in poblacion['pop'][:2]:
-                popBuffer.append(ind)
+                if uniqueBuffer: 
+                    if ind['score'] not in [ind['score']for ind in popBuffer._list]: 
+                        popBuffer.append(ind)
+                else:
+                    popBuffer.append(ind)
 
             print('--------- original  ---------------------')
             for sol in poblacion['pop']:
@@ -244,7 +232,7 @@ if __name__ == "__main__":
     with open("config.json", "r") as conf_file:
         config = json.load(conf_file)
     Setup(config)
-    combina_buffer(config, random=False) # False Best, True Random
+    combina_buffer(config, random=True, uniqueBuffer=True) # False Best, True Random
     # Cruce:
     # combina(config)
 

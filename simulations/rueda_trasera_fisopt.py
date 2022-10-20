@@ -222,7 +222,7 @@ def prueba_simulador(params, controller, grafica=False):
         suma_error += error_ruta[0]
 
     fit_ruta = suma_error/float(len(lista_rutas))
-    print(fit_ruta)
+    #print(fit_ruta)
     return fit_ruta,
 
 
@@ -294,7 +294,7 @@ def rutas(ax, ay, params,controller, grafica=False):  # metodo a llamar 3 veces
             plt.show()
         #print(error)
         error_rmse = sum([i ** 2 for i in error]) / len(error) ** .5
-        print("error",error_rmse)
+        #print("error score",error_rmse)
         return error_rmse,
 
 if __name__ == '__main__':
