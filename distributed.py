@@ -155,8 +155,15 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
         if mensaje_poblacion:
             poblacion = json.loads(mensaje_poblacion)
             #print('Población recibida ... ')
-            #print(poblacion)
+            if 'num_pasada' not in poblacion:
+                poblacion['num_pasada'] = 1 
+            else:
+                poblacion['num_pasada']+=1
 
+            if poblacion['algorithm'] == 'PSO':
+                poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config['num_cycles'] 
+                poblacion['phi2'] = poblacion['phi2'] - poblacion['phi2'] * poblacion['num_pasada'] / config['num_cycles'] 
+                print(poblacion['algorithm'], poblacion['id'],poblacion['phi1'])
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion['total_num_eval']
