@@ -152,7 +152,7 @@ def simulacion(ruta, meta_objetivo, params, controller):
             break
 
         # Dos veces?
-        di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
+        # di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
 
         speed_ref, direction = calc_target_speed(yaw0, yaw_ref, direction)
         aceleracion = pid_control(speed_ref, v0)
