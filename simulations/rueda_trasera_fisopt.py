@@ -32,17 +32,6 @@ def control_rueda_trasera(v, yaw0, e, k, yaw_ref, params, controller):
     else:
         omega = controller(error_teta, e, params=params)
         
-    # sustituir la formula con el fis sin optimizar
-    # mandas el error teta y aerror
-
-    ## llamar al fis optimizado
-    #print(error_teta, e)
-
-    # if error_teta > 0:
-    #     omega*=-1
-
-    #print("omega",omega, "error teta ", error_teta, "error ", e)
-
     if error_teta == 0.0 or omega == 0.0 or v == 0.0:
         return 0.0
 
@@ -91,48 +80,14 @@ def simulacion(ruta, meta_objetivo, params, controller):
     # lo pones en 101 para que haga 100 pedazos
     t = np.linspace(1, 50,501)
     
-    # haces un arreglo en numpy de unos en el tiempo
-   # deltai = np.zeros(len(t))
-  #  aceleracioni=np.zeros(len(t))
-
-   # llena el arreglo con estos valores en el rango de las posiciones indicadas
-   # deltai[1:9] = .5
-   # deltai[10:30] = 1
-   # deltai[31:40] = -1
-   # deltai[41:60] = 1
-    #deltai[61-100] = .4
-
-    #aceleracioni[:10] = 2
-  #  aceleracioni[11:30] = 2
-   # aceleracioni[31:40] = 1
-   # aceleracioni[41:50] = -1
-  #  aceleracioni[71:100] = 2
     di=0
     aceleracion = 0
 
 
     for i in range(len(t)-1):
-        # se inicializan por lo pronto el angulo y la aceleracion
-
-        # esto se controlara con el metodo pid_control
-        # para contolar la aceleracion
-        #if i < 10:      # el 10 seria en el primer segundo
-         #   aceleracion = 3    # dado en m
-        #elif i > 11 and i < 30:
-         #   aceleracion = 1.5
-        #else:
-         #   aceleracion =0
-
-        #if i > 10 and i < 20:
-         #   di = -.8  # dado en radianes, seria un cuarto de radian
-        #else:
-        #    di = 0.05
-        # inputs(deltai[i], aceleracioni[i])
 
         goal_flag=False
         error_flag=False
-
-        # hacer el control de acuerdo al angulo y error
 
         # di = metodo de control
         # aceleracion
