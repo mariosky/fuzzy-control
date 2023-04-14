@@ -195,7 +195,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
             # Save the best two populations to the buffer
             for ind in poblacion['pop'][:2]:
                 if uniqueBuffer: 
-                    if ind['score'] not in [ind['score']for ind in popBuffer._list]: 
+                    if ind['score'] not in [ind['score'] for ind in popBuffer._list]:
                         popBuffer.append(ind)
                 else:
                     popBuffer.append(ind)

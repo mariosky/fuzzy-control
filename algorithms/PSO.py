@@ -1,15 +1,15 @@
 # Example from:
 #https://deap.readthedocs.io/en/master/examples/pso_basic.html#poli2007
 
-
+from lib.diversity import diversidad  # importar los metodos para calcular la diversidad
+from lib.fisAjusteC1_C2 import fis_opt_Ajuste  #llamar al fis para c1 y c2
+from lib.grafica_ajuste import metodo_grafica   #llamar al metodo para graficar
 import operator
 import random
-
 import numpy
 import math
 import json
 from deap import base
-from deap import creator
 import time
 from deap import creator
 from deap import tools
@@ -52,6 +52,7 @@ def main(config):
     toolbox.register("particle", generate,  size=config['list_size'], pmin=config['pmin'], pmax=config['pmax'], smin=config['smin'], smax=config['smax'])
     toolbox.register("evaluate", get_eval(config['controller_module'], config['simulation']))# parametro   get_eval(fis, px control)
     toolbox.register("population", tools.initRepeat, list, toolbox.particle)
+    # para variable c1 y c2
     toolbox.register("update", updateParticle, phi1=config['phi1'], phi2=config['phi2'])
 
     # pop = toolbox.population(n=config['pop_size'])
@@ -69,7 +70,11 @@ def main(config):
     GEN = config['ngen']
     pop = config['pop']
     best = None
-
+    #imprime la diversinad inicial antes de evolucionar
+    print("primero diversidad", diversidad(pop[0],pop))
+  #imprime la poblacion creada
+    print("poblacion",pop)
+    datos=[]
     for g in range(GEN):
         for part in pop:
             part.fitness.values = toolbox.evaluate(part)
@@ -79,13 +84,26 @@ def main(config):
             if not best or best.fitness < part.fitness:
                 best = creator.Particle(part)
                 best.fitness.values = part.fitness.values
+
+        diver = diversidad(best, pop)
+        ##phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
+        ## para fijo c1 y c2
+        phi1 = 2.0 #config['phi1']
+        phi2 = 2.0 #config['phi2']
+        print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
+        datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
+
         for part in pop:
-            toolbox.update(part, best)
+            #toolbox.update(part, best)
+            updateParticle(part,best,phi1,phi2)
+            # imprime la diversidd despues de acualizar en cada generacion
+        #print("diversidad real", diversidad(best,pop))
 
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
 #        config['Tiempo_Total'] = time.time() - inicio_tiempo
+    metodo_grafica(datos)
     print(logbook.chapters)
 
     pop.pop(-1)
