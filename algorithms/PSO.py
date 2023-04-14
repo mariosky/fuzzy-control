@@ -74,7 +74,7 @@ def main(config):
     print("primero diversidad", diversidad(pop[0],pop))
   #imprime la poblacion creada
     print("poblacion",pop)
-    datos=[]
+    #### datos=[]
     for g in range(GEN):
         for part in pop:
             part.fitness.values = toolbox.evaluate(part)
@@ -88,10 +88,14 @@ def main(config):
         diver = diversidad(best, pop)
         ##phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         ## para fijo c1 y c2
-        phi1 = 2.0 #config['phi1']
-        phi2 = 2.0 #config['phi2']
-        print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
-        datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
+        if 'dynamic_parameters' in config:
+            if config['none']:
+                phi1 = config['phi1']
+                phi2 = config['phi2']
+        ##print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
+            else:
+                phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
+        #### datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
 
         for part in pop:
             #toolbox.update(part, best)
@@ -103,7 +107,7 @@ def main(config):
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
 #        config['Tiempo_Total'] = time.time() - inicio_tiempo
-    metodo_grafica(datos)
+    #### metodo_grafica(datos)
     print(logbook.chapters)
 
     pop.pop(-1)

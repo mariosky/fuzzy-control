@@ -1,1 +1,0 @@
-{"pop_size": 10, "ngen": 15, "smin": -0.25, "smax": 0.25, "pmin": 0, "pmax": 1, "list_size": 15, "controller_module": "fis5r15p", "simulation": "rueda_trasera_fisopt", "runs": 1, "phi1": 2.0, "phi2": 2.0}
