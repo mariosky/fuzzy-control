@@ -13,25 +13,25 @@ def fis_opt_Ajuste(ciclo, diversidad, grafica):
 
     x_ciclo = np.arange(0,16,.1)
     x_diversidad = np.arange(0,31, .1)  ## el 11 es solo para graficar
-    x_C1 = np.arange(-1.5, 3.5, .1)
-    x_C2 = np.arange(-1.5, 3.5, .1)
+    x_C1 = np.arange(0, 3, .1)
+    x_C2 = np.arange(0, 3, .1)
 
     # Generate fuzzy membership functions trapezoidal y triangular
-    ciclo_hi  = fuzz.trimf(x_ciclo, [5, 10, 15])
-    ciclo_med = fuzz.trimf(x_ciclo, [3, 5, 8])
-    ciclo_low = fuzz.trimf(x_ciclo, [-5, 0, 5])
+    ciclo_hi  = fuzz.trimf(x_ciclo, [6, 8, 10])
+    ciclo_med = fuzz.trimf(x_ciclo, [2.5, 5, 7.5])
+    ciclo_low = fuzz.trimf(x_ciclo, [-4, 0, 4])
 
     diversidad_hi  = fuzz.trapmf(x_diversidad,  [10,15,30,31])
     diversidad_med = fuzz.trimf(x_diversidad,  [5, 10 ,15])
     diversidad_low = fuzz.trimf(x_diversidad,  [-5,0,7])
 
-    C1_hi = fuzz.trimf(x_C1, [1, 2, 3])
-    C1_med = fuzz.trimf(x_C1, [0, 1, 2])
-    C1_low = fuzz.trimf(x_C1, [-1, 0, 1])
+    C1_hi = fuzz.trimf(x_C1, [1.5, 2, 2.5])
+    C1_med = fuzz.trimf(x_C1, [1, 1.5, 2])
+    C1_low = fuzz.trimf(x_C1, [0.5, 1, 1.5])
 
-    C2_hi = fuzz.trimf(x_C2, [1, 2, 3])
-    C2_med = fuzz.trimf(x_C2, [0, 1, 2])
-    C2_low = fuzz.trimf(x_C2, [-1, 0, 1])
+    C2_hi = fuzz.trimf(x_C2, [1.5, 2, 2.5])
+    C2_med = fuzz.trimf(x_C2, [1, 1.5, 2])
+    C2_low = fuzz.trimf(x_C2, [0.5, 1, 1.5])
 
     # We need the activation of our fuzzy membership functions at these values.
     # This is what fuzz.interp_membership exists for!
