@@ -73,7 +73,7 @@ def main(config):
     #imprime la diversinad inicial antes de evolucionar
     print("primero diversidad", diversidad(pop[0],pop))
   #imprime la poblacion creada
-    print("poblacion",pop)
+    # print("poblacion",pop)
     #### datos=[]
     for g in range(GEN):
         for part in pop:
@@ -88,15 +88,17 @@ def main(config):
         diver = diversidad(best, pop)
         ##phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         ## para fijo c1 y c2
-        if 'dynamic_parameters' in config:
-            if config['none']:
+        if 'dynamic_params' in config:
+            if config['dynamic_params'] == 'none':
                 phi1 = config['phi1']
                 phi2 = config['phi2']
         ##print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
-            else:
+            elif config['dynamic_params'] == 'fuzzy':
+                print('fuzzy inputs', g+1, diver)
                 phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         #### datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
 
+        print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
         for part in pop:
             #toolbox.update(part, best)
             updateParticle(part,best,phi1,phi2)

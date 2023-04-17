@@ -12,7 +12,7 @@ def not_less_than_zero(v):
 def fis_opt_Ajuste(ciclo, diversidad, grafica):
 
     x_ciclo = np.arange(0,16,.1)
-    x_diversidad = np.arange(0,21, .1)  ## el 11 es solo para graficar
+    x_diversidad = np.arange(0,31, .1)  ## el 11 es solo para graficar
     x_C1 = np.arange(-1.5, 3.5, .1)
     x_C2 = np.arange(-1.5, 3.5, .1)
 
@@ -21,7 +21,7 @@ def fis_opt_Ajuste(ciclo, diversidad, grafica):
     ciclo_med = fuzz.trimf(x_ciclo, [3, 5, 8])
     ciclo_low = fuzz.trimf(x_ciclo, [-5, 0, 5])
 
-    diversidad_hi  = fuzz.trapmf(x_diversidad,  [10,15,17,20])
+    diversidad_hi  = fuzz.trapmf(x_diversidad,  [10,15,30,31])
     diversidad_med = fuzz.trimf(x_diversidad,  [5, 10 ,15])
     diversidad_low = fuzz.trimf(x_diversidad,  [-5,0,7])
 
