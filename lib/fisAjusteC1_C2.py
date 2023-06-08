@@ -11,10 +11,10 @@ def not_less_than_zero(v):
 
 def fis_opt_Ajuste(ciclo, diversidad, grafica):
 
-    x_ciclo = np.arange(0,8,.1)
+    x_ciclo = np.arange(0, 8, .1)
     x_diversidad = np.arange(0,20, .1)  ## el 11 es solo para graficar
     x_C1 = np.arange(1, 2, .1)
-    x_C2 = np.arange(1,2, .1)
+    x_C2 = np.arange(1, 2, .1)
 
     # Generate fuzzy membership functions trapezoidal y triangular
     ciclo_hi  = fuzz.trimf(x_ciclo, [6, 8, 10])
