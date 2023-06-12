@@ -3,7 +3,7 @@
 
 from lib.diversity import diversidad  # importar los metodos para calcular la diversidad
 from lib.fisAjusteC1_C2 import fis_opt_Ajuste  #llamar al fis para c1 y c2
-from lib.grafica_ajuste import metodo_grafica   #llamar al metodo para graficar
+from lib.grafica_ajuste_individual import metodo_grafica   #llamar al metodo para graficar
 import operator
 import random
 import numpy
