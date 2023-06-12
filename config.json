@@ -13,7 +13,7 @@
      "pmin": 0, "pmax": 1,
      "phi1": [1.0,2.0],
      "phi2": [1.0,2.0],
-     "dynamic_params":"fuzzy",
+     "dynamic_params":"none",
      "a":[1.0,2.0],
      "controller_module":"fis5r15p",
      "simulation":"rueda_trasera_fisopt",
