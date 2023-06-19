@@ -168,7 +168,8 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 #poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config['num_cycles'] 
                 #poblacion['phi2'] = poblacion['phi2'] - poblacion['phi2'] * poblacion['num_pasada'] / config['num_cycles'] 
                 #print(poblacion['algorithm'], poblacion['id'],poblacion['phi1'])
-                diver = diversidad(poblacion['best_solution'], poblacion['pop'])  # calcula la diverisdad
+                pop=[ind['solution'] for ind in poblacion['pop']]
+                diver = diversidad(poblacion['best_solution'], pop)  # calcula la diverisdad
                 poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'] + 1, diver, False)
                 print("ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2']))
             num_total += 1
