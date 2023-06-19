@@ -160,7 +160,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
 
                 #print('Población recibida ... ')
                 if 'num_cycle' not in poblacion:
-                   poblacion['num_cycle'] = 1
+                   poblacion['num_cycle'] = 0
                 else:
                    poblacion['num_cycle']+=1
 
@@ -171,7 +171,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 pop=[ind['solution'] for ind in poblacion['pop']]
                 diver = diversidad(poblacion['best_solution'], pop)  # calcula la diverisdad
                 print("ciclo={0}, diversidad={1}".format(poblacion['num_cycle'], diver))
-                poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'] + 1, diver, False)
+                poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'], diver, False)
                 print("termina ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2']))
             num_total += 1
             num_poblaciones_recibidas += 1
