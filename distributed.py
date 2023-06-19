@@ -170,7 +170,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 #print(poblacion['algorithm'], poblacion['id'],poblacion['phi1'])
                 diver = diversidad(poblacion['best_fitness'], poblacion)  # calcula la diverisdad
                 poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'] + 1, diver, False)
-
+                print("ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2']))
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion['total_num_eval']

@@ -99,7 +99,7 @@ def main(config):
                 phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         #### datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
 
-        print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
+                print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
         for part in pop:
             #toolbox.update(part, best)
             updateParticle(part,best,phi1,phi2)
