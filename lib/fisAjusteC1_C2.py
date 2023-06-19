@@ -187,5 +187,5 @@ def fis_opt_Ajuste(ciclo, diversidad, grafica):
     return resultC1,resultC2
 
 if __name__ == '__main__':
-    C1, C2 = fis_opt_Ajuste(8,8.4,True)
+    C1, C2 = fis_opt_Ajuste(7,5.19,True)
     print(C1,C2)
