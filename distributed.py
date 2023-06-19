@@ -1,6 +1,7 @@
 # hacer al que inicia el experimento y ver como avanza y mezclando poblaciones
 import random
-
+from lib.diversity import diversidad  # importar los metodos para calcular la diversidad
+from lib.fisAjusteC1_C2 import fis_opt_Ajuste  #llamar al fis para c1 y c2
 import redis
 import json
 import time
@@ -154,16 +155,22 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
 
         if mensaje_poblacion:
             poblacion = json.loads(mensaje_poblacion)
-            #print('Población recibida ... ')
-            #if 'num_pasada' not in poblacion:
-            #    poblacion['num_pasada'] = 1 
-            #else:
-            #    poblacion['num_pasada']+=1+
+
+            if 'dynamic_params' in config and config['dynamic_params'] == 'cycle':
+
+                #print('Población recibida ... ')
+                if 'num_cycle' not in poblacion:
+                   poblacion['num_cycle'] = 1
+                else:
+                   poblacion['num_cycle']+=1
 
             #if poblacion['algorithm'] == 'PSO':
                 #poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config['num_cycles'] 
                 #poblacion['phi2'] = poblacion['phi2'] - poblacion['phi2'] * poblacion['num_pasada'] / config['num_cycles'] 
                 #print(poblacion['algorithm'], poblacion['id'],poblacion['phi1'])
+                diver = diversidad(poblacion['best_fitness'], poblacion)  # calcula la diverisdad
+                poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'] + 1, diver, False)
+
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion['total_num_eval']

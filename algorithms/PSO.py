@@ -85,15 +85,16 @@ def main(config):
                 best = creator.Particle(part)
                 best.fitness.values = part.fitness.values
 
-        diver = diversidad(best, pop)
+
         ##phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         ## para fijo c1 y c2
         if 'dynamic_params' in config:
-            if config['dynamic_params'] == 'none':
+            if config['dynamic_params'] == 'none' or config['dynamic_params'] == 'cycle':
                 phi1 = config['phi1']
                 phi2 = config['phi2']
         ##print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
             elif config['dynamic_params'] == 'fuzzy':
+                diver = diversidad(best, pop)
                 print('fuzzy inputs', g+1, diver)
                 phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         #### datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
