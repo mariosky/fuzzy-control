@@ -160,9 +160,9 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
 
                 #print('Población recibida ... ')
                 if 'num_cycle' not in poblacion:
-                   poblacion['num_cycle'] = 0
-                else:
-                   poblacion['num_cycle']+=1
+                    poblacion['num_cycle'] = 1
+                elif poblacion['num_cycle']<=9:
+                    poblacion['num_cycle']+=1
 
             #if poblacion['algorithm'] == 'PSO':
                 #poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config['num_cycles'] 
