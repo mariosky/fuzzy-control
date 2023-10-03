@@ -25,21 +25,21 @@ def metodo_grafica(datos):
     #     ax.get_yaxis().tick_left()
 
     fig, (ax0, ax2) = plt.subplots(nrows=2, figsize=(7, 9))
-    ax0.set_title("Gráfica Diversidad y C1 y C2")
+    ax0.set_title("Diversity Plot for C1 and C2")
     color="tab:red"
     ax0.set_xticks(arreglo[:,0])
     ax0.yaxis.set_major_locator(MultipleLocator(1.0))
     ax0.yaxis.set_minor_locator(MultipleLocator(0.5))
-    ax0.set_xlabel("Generación")
-    ax0.set_ylabel("Distancia",color=color)
-    a1=ax0.plot(arreglo[:, 0], arreglo[:, 1], '-d', label="Diversidad",color=color)   #diversidad
+    ax0.set_xlabel("Cycles")
+    ax0.set_ylabel("Distance",color=color)
+    a1=ax0.plot(arreglo[:, 0], arreglo[:, 1], '-d', label="Diversity",color=color)   #diversidad
     print("valor Diversidad",arreglo[:, 1])
     ax0.tick_params(axis="y", labelcolor=color)
 
     ax1=ax0.twinx()
 
     color = "tab:green"
-    ax1.set_ylabel("Coeficientes C1 y C2",color=color)
+    ax1.set_ylabel(" C1 and C2 Coefficients",color=color)
     a2=ax1.plot(arreglo[:, 0], arreglo[:, 2], '-s', label="C1",color=color)   #C1
     a3=ax1.plot(arreglo[:, 0], arreglo[:, 3], '-o', label="C2",color="orange")     #c2
     ax1.tick_params(axis="y", labelcolor=color)
@@ -56,9 +56,9 @@ def metodo_grafica(datos):
     ax2.set_xticks(arreglo[:, 0])
     ax2.plot(arreglo[:, 0], arreglo[:, 4], 'kd', label="fitness")  # fitness
     ax2.legend()
-    ax2.set_xlabel("Generación")
+    ax2.set_xlabel("Cycles")
     ax2.set_ylabel("Fitness")
-    ax2.set_title("Gráfica de Fitness")
+    ax2.set_title("Fitness Plot")
     ax2.semilogy()
     #ax2.ylim(0,10**-5)
     ax2.spines['top'].set_visible(False)
@@ -68,14 +68,24 @@ def metodo_grafica(datos):
 
 
     plt.tight_layout()
-    fig.savefig("C:/Users/Alejandra/fuzzy-control/plotParamPSO.png")
+    fig.savefig("C:/Users/Alejandra/fuzzy-control/plotParamPSO.pdf")
     plt.show()
 
 
 if __name__ == '__main__':
-    datos=[[1,3.5,6,2,6],
-           [2,4.7,1,3,2],
-           [3,2.2,2,9,1]]
+          # ciclo, diversidad, c1,c2,fitness
+    datos=[[1, 15.03,  0,    2,    0.07],
+           [2, 11.05,  0.02, 1.25, 0.07],
+           [3, 11,     0.03, 1.27, 0.05],
+           [4, 10.39,  0.85, 1.14, 0.05],
+           [5, 8.7,    1,    1,    0.05],
+           [6, 6.5,    1.35, 0.75, 0.05],
+           [7, 7.8,    1.40, 1.07, 0.035],
+           [8, 7.3,    1.68, 1.05, 0.035],
+           [9, 7.2,    1.79, 1.08, 0.035],
+           [10, 7.0,   2,    1.05, 0.035],
+
+           ]
     metodo_grafica(datos)
 
 

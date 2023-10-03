@@ -2,6 +2,7 @@
 import random
 from lib.diversity import diversidad  # importar los metodos para calcular la diversidad
 from lib.fisAjusteC1_C2 import fis_opt_Ajuste  #llamar al fis para c1 y c2
+#from lib.grafica_ajuste import metodo_grafica # llamar grafica
 import redis
 import json
 import time
@@ -173,6 +174,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 print("ciclo={0}, diversidad={1}".format(poblacion['num_cycle'], diver))
                 poblacion['phi1'], poblacion['phi2'] = fis_opt_Ajuste(poblacion['num_cycle'], diver, False)
                 print("termina ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2']))
+              #  metodo_grafica(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2'])
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion['total_num_eval']
@@ -188,6 +190,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 #print('ya son 12 poblaciones recibidas ...')
                 total_time= time.time()-inicio_tiempo
                 # imprime los resultados
+
                 print("resultados del experimento")
 
                 print(total_evals/total_time, total_time, total_evals)

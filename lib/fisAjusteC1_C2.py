@@ -49,7 +49,7 @@ def fis_opt_Ajuste(ciclo, diversidad, grafica):
         ax0.plot(x_ciclo, ciclo_hi, 'b', linewidth=1.5, label='High')
         ax0.plot(x_ciclo, ciclo_med, 'g', linewidth=1.5, label='Medium')
         ax0.plot(x_ciclo, ciclo_low, 'r', linewidth=1.5, label='Low')
-        ax0.set_title('Generations ')
+        ax0.set_title('Cycles ')
         ax0.legend()
 
         ax1.plot(x_diversidad, diversidad_hi, 'b', linewidth=1.5, label='High')
