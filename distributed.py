@@ -7,6 +7,7 @@ import redis
 import json
 import time
 from popbuffer import PopBuffer
+import os
 
 #metodo para imprimir datos de configuracion de cada algoritmo
 def Imprime_Config(poblaciones):
@@ -37,7 +38,7 @@ def Generador_de_poblaciones(strategies):
 
 
 def Setup(config):
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r = redis.StrictRedis(host=os.environ['REDIS_HOST'], port=6379, db=0)
     redis_ready = False
     # intenta hasta que este listo el contenedor
     while not redis_ready:
@@ -58,86 +59,6 @@ def Setup(config):
         mensaje = json.dumps(poblacion).encode('utf-8')
         r.lpush('cola_de_mensajes', mensaje)
 
-def combina(config):
-    inicio_tiempo = time.time()
-    popBuffer = PopBuffer(key=lambda x: x['score'], size=10)
-
-    num_poblaciones_recibidas = 0
-    poblaciones_recibidas = []
-    num_total = 0
-    total_evals = 0
-
-    best_fitness = 5000
-    best_solution = None
-
-    while True:
-        r = redis.StrictRedis(host='localhost', port=6379, db=0)
-        _, mensaje_poblacion = r.brpop('cola_evolucionada')
-
-        if mensaje_poblacion:
-            poblacion = json.loads(mensaje_poblacion)
-            #print('Población recibida ... ')
-            num_total += 1
-            num_poblaciones_recibidas += 1
-            poblaciones_recibidas.append(poblacion)
-            total_evals += poblacion['total_num_eval']
-
-            if poblacion["best_fitness"] < best_fitness:
-                best_fitness = poblacion["best_fitness"]
-                best_solution = poblacion["best_solution"]
-            #imprimir los datos
-            #print(poblacion['id'], poblacion['cxpb'], poblacion['mutpb'], poblacion['Best_fitness'],poblacion['Total_num_eval'])
-
-
-            if num_total == config['num_poblaciones']*config['num_cycles']:   # para salirse cuando llegue a 10 poblacioens
-                #print('ya son 12 poblaciones recibidas ...')
-                total_time= time.time()-inicio_tiempo
-                # imprime los resultados
-                print("resultados del experimento")
-                print(total_evals/total_time, total_time, total_evals, poblacion['best_fitness'], poblacion["algorithm"])
-                print("best score:{0} best fitness {1}".format(best_fitness, best_solution))
-                break
-
-
-            if num_poblaciones_recibidas == 2:
-                print('Ya hay Dos poblaciones recibidas para migrar')
-                print('pop1:', poblaciones_recibidas[0]['best_fitness'])
-                print('pop2:', poblaciones_recibidas[1]['best_fitness'])
-
-                # aqui se puede hacer la mezcla (suffle)
-                mensajeA = poblaciones_recibidas[0]
-                mensajeB = poblaciones_recibidas[1]
-
-                # esta es otra manera de migrar mas elitista
-                mensajeA['pop'].sort(key=lambda ind: ind['score'])
-                mensajeB['pop'].sort(key=lambda ind: ind['score'])
-
-                # print(mensajeA['pop'][0:2]) # imprime los dos mejores porque estan ordenados
-                # print(mensajeB['pop'][0:2])
-
-                # se hace el intercambio con los mejores de cada uno
-                # los mejores dos se intercambian por los dos peores
-
-                mensajeA['pop'] = mensajeA['pop'][:-2] + mensajeB['pop'][:2]
-                mensajeB['pop'] = mensajeB['pop'][:-2] + mensajeA['pop'][:2]
-
-
-
-                # esta es una manera de migrar
-                # mitad = len(mensajeA['pop'])//2  #sacas la long de la pop
-
-                # mensajeA['pop'] = mensajeA['pop'][mitad:] + mensajeB['pop'][:mitad]
-                # mensajeB['pop'] = mensajeB['pop'][mitad:] + mensajeA['pop'][:mitad]
-
-                mensaje1 = json.dumps(mensajeA).encode('utf-8')
-                r.lpush('cola_de_mensajes', mensaje1)
-
-                mensaje2 = json.dumps(mensajeB).encode('utf-8')
-                r.lpush('cola_de_mensajes', mensaje2)
-
-                num_poblaciones_recibidas = 0
-                poblaciones_recibidas = []
-
 
 def combina_buffer(config, random=False, uniqueBuffer=False):
     inicio_tiempo = time.time()
@@ -151,7 +72,7 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
     best_solution = None
 
     while True:
-        r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        r = redis.StrictRedis(host=os.environ['REDIS_HOST'], port=6379, db=0)
         _, mensaje_poblacion = r.brpop('cola_evolucionada')
 
         if mensaje_poblacion:
