@@ -17,7 +17,7 @@ class NumpyArrayEncoder(JSONEncoder):
 r = redis.StrictRedis(host=os.environ['REDIS_HOST'], port=6379, db=0)
 
 redis_ready = False
-
+print(os.environ['REDIS_HOST'])
 # intenta hasta que este listo el contenedor
 while not redis_ready:
     try:

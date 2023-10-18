@@ -71,7 +71,7 @@ def main(config):
     pop = config['pop']
     best = None
     #imprime la diversinad inicial antes de evolucionar
-    print("primero diversidad", diversidad(pop[0],pop))
+    #####print("primero diversidad", diversidad(pop[0],pop))
   #imprime la poblacion creada
     # print("poblacion",pop)
     #### datos=[]
@@ -99,7 +99,7 @@ def main(config):
                 phi1, phi2 = fis_opt_Ajuste(g+1, diver, False)
         #### datos.append([g, diver, phi1, phi2,best.fitness.values[0]])
 
-                print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
+                ####print("g={0}, diversidad={1}, C1={2}, C2={3}".format(g, diver, phi1, phi2))
         for part in pop:
             #toolbox.update(part, best)
             updateParticle(part,best,phi1,phi2)
@@ -108,10 +108,10 @@ def main(config):
 
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
-        print(logbook.stream)
+        #####print(logbook.stream)
 #        config['Tiempo_Total'] = time.time() - inicio_tiempo
     #### metodo_grafica(datos)
-    print(logbook.chapters)
+    #####print(logbook.chapters)
 
     pop.pop(-1)
     pop.append(best)

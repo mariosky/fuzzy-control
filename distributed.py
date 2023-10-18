@@ -10,20 +10,19 @@ from popbuffer import PopBuffer
 import os
 
 #metodo para imprimir datos de configuracion de cada algoritmo
-def Imprime_Config(poblaciones):
+####def Imprime_Config(poblaciones):
 
-    for pob in poblaciones:
+####    for pob in poblaciones:
         #imprime toda la config
 #       print(pob)
         #imprime en lista toda la info requerida
-        print("\n {0}".format(pob["id"]))
+####    print("\n {0}".format(pob["id"]))
        #print(pob["params"][pob["algorithm"]])
-        for parametro in pob["params"][pob["algorithm"]]:
-            print("{0}: {1:.4f}".format(parametro,pob[parametro]))
-
+####for parametro in pob["params"][pob["algorithm"]]:
+####      print("{0}: {1:.4f}".format(parametro,pob[parametro]))
 
 def Generador_de_poblaciones(strategies):
-      # se van a ahacer 6 poblaciones iniciales
+      # se van a a hacer 6 poblaciones iniciales
     poblaciones = []
     for i, algorithm in enumerate(strategies):
             configBasica = config.copy()
@@ -36,10 +35,10 @@ def Generador_de_poblaciones(strategies):
 
     return poblaciones
 
-
 def Setup(config):
     r = redis.StrictRedis(host=os.environ['REDIS_HOST'], port=6379, db=0)
     redis_ready = False
+    print(os.environ['REDIS_HOST'])
     # intenta hasta que este listo el contenedor
     while not redis_ready:
         try:
@@ -47,18 +46,19 @@ def Setup(config):
         except:
             print("waiting for redis")
             time.sleep(3)
-
+    # limpiar redi de las poblaciones anteriores
+    r.flushall()
+    #####print("vaciando redis")
     # generar las poblaciones
     poblaciones=Generador_de_poblaciones(config["strategies"])
 
     # imprimir la lista de config llamar al metodo
-    Imprime_Config(poblaciones)
+    #####Imprime_Config(poblaciones)
 
     #enviamos las 5 poblaciones, lo vamos a hacer varias veces (for)
     for poblacion in poblaciones:
         mensaje = json.dumps(poblacion).encode('utf-8')
         r.lpush('cola_de_mensajes', mensaje)
-
 
 def combina_buffer(config, random=False, uniqueBuffer=False):
     inicio_tiempo = time.time()
@@ -120,7 +120,6 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
 
             print('pop:', poblacion['best_fitness'], poblacion['algorithm'], poblacion['id'], num_total)
 
-
             # esta es otra manera de migrar mas elitista
             poblacion['pop'].sort(key=lambda ind: ind['score'])
             #print(poblacion['pop'])
@@ -133,15 +132,16 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
                 else:
                     popBuffer.append(ind)
 
-            print('--------- original  ---------------------')
-            for sol in poblacion['pop']:
-                print(sol['score'])
+   #####    print('--------- original  ---------------------')
+   #####    for sol in poblacion['pop']:
+   #####        print(sol['score'])
 
-            print('--------- buffer ---------------------')
-            for sol in popBuffer._list:
-                print(sol['score'])
+   #####     print('--------- buffer ---------------------')
+   #####    for sol in popBuffer._list:
+   #####       print(sol['score'])
 
-            print('--------- modificada ---------------------')
+   #####    print('--------- modificada ---------------------')
+
             # replace the worst two individuals with two random from the buffer
             # poblacion['pop'] = poblacion['pop'][:-2] + [popBuffer.random_choice() for i in range(2)]
             if random:
@@ -149,11 +149,9 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
             else:
                 poblacion['pop'] = poblacion['pop'][:-2] + popBuffer.best(2)
 
-            for sol in poblacion['pop']:
-                print(sol['score'])
-            print('------------------------------')
-
-
+    #####   for sol in poblacion['pop']:
+    #####       print(sol['score'])
+    #####   print('------------------------------')
 
             # esta es una manera de migrar
             # mitad = len(mensajeA['pop'])//2  #sacas la long de la pop
@@ -163,9 +161,6 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
 
             mensaje = json.dumps(poblacion).encode('utf-8')
             r.lpush('cola_de_mensajes', mensaje)
-
-
-
 
 if __name__ == "__main__":
     config: None
