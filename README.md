@@ -20,4 +20,4 @@ docker-compose up --rebuild -d
 ## Run the algorithms
 1. Change the configuration file
 2. Run the workers using docket-compose
-3. Run in another terminal the controller ~pyhton distributed.py~
+3. Run the controller in another terminal with `pyhton distributed.py`
