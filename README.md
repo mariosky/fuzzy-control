@@ -18,6 +18,6 @@ docker-compose up --scale worker=7 --remove-orphans
 docker-compose up --rebuild -d 
 
 ## Run the algorithms
-1. Change the configuration file
+1. Change the configuration file (`config.json`) 
 2. Run the workers using docket-compose
 3. Run the controller in another terminal with `pyhton distributed.py`
