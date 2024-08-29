@@ -5,6 +5,9 @@
      "GWO": ["a"]
      },
      "strategies":["PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
                    "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO"],
      "cxpb":[0.3,0.9],
      "mutpb":[0.1,0.5],
@@ -21,7 +24,7 @@
      "ini_min":0, "ini_max":1,
      "list_size":15,
      "pop_size":10,
-     "ngen":8,
-     "num_poblaciones":16,
+     "ngen":4,
+     "num_poblaciones":40,
      "num_cycles":10
 }
