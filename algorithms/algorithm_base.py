@@ -2,7 +2,7 @@ import random
 
 def save_config(config, tiempo_total, best_fitness, best_solution, stats, pop):
     config['tiempo_total'] = tiempo_total
-    config['total_num_eval'] = config['pop_size']
+    config['total_num_eval'] = config['pop_size']*config['ngen']
     config['best_fitness'] = best_fitness
     config['best_solution'] = best_solution
     config['stats'] = stats

@@ -8,6 +8,11 @@
                    "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
                    "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
                    "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
+                   "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO",
                    "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO", "PSO"],
      "cxpb":[0.3,0.9],
      "mutpb":[0.1,0.5],
@@ -25,6 +30,6 @@
      "list_size":15,
      "pop_size":10,
      "ngen":4,
-     "num_poblaciones":40,
+     "num_poblaciones":80,
      "num_cycles":10
 }

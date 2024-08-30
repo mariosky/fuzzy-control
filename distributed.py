@@ -26,6 +26,7 @@ def Generador_de_poblaciones(strategies):
     poblaciones = []
     for i, algorithm in enumerate(strategies):
             configBasica = config.copy()
+            configBasica['num_poblaciones']=len(strategies)
             configBasica['algorithm'] = algorithm
             configBasica['id'] = algorithm + "-" + str(i)
             for llave in configBasica:    #para sacar un valor aleatorio del rango
