@@ -17,3 +17,5 @@ setuptools-scm==6.3.2
 six==1.16.0
 tomli==1.2.2
 wrapt==1.13.3
+requests==2.29.0
+
