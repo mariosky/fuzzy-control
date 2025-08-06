@@ -1,4 +1,10 @@
 # Install
+
+## Get Docker
+
+From [here](https://docs.docker.com/get-started/get-docker/)
+
+## Create a Python environment
 ```
 python3 -m venv venv
 pip3 install -r requirements.txt
@@ -19,5 +25,5 @@ docker-compose up --rebuild -d
 
 ## Run the algorithms
 1. Change the configuration file (`config.json`) 
-2. Run the workers using docket-compose
+2. Run the workers using `docker compose`
 3. Run the controller in another terminal with `pyhton distributed.py`
