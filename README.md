@@ -6,7 +6,10 @@ From <a href="https://docs.docker.com/get-started/get-docker/" target="_blank" r
 
 ## Create a Python environment
 ```
+git clone git@github.com:mariosky/fuzzy-control.git
+cd fuzzy-control
 python3 -m venv venv
+source /venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
