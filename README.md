@@ -2,7 +2,7 @@
 
 ## Get Docker
 
-From [here](https://docs.docker.com/get-started/get-docker/)
+From <a href="https://docs.docker.com/get-started/get-docker/" target="_blank">here</a>
 
 ## Create a Python environment
 ```
