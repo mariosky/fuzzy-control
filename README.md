@@ -20,6 +20,11 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 venv\Scripts\Activate.ps1
 ```
 
+## Set Environment Variables
+```
+export REDIS_HOST=127.0.0.1
+```
+
 ## Docker compose
 docker-compose up --scale worker=7 --remove-orphans
 
@@ -29,4 +34,4 @@ docker-compose up --rebuild -d
 ## Run the algorithms
 1. Change the configuration file (`config.json`) 
 2. Run the workers using `docker compose`
-3. Run the controller in another terminal with `pyhton distributed.py`
+3. Run the controller in another terminal with **`pyhton distributed.py`**
