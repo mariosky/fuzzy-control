@@ -29,7 +29,7 @@ export REDIS_HOST=127.0.0.1
 docker-compose up --scale worker=7 --remove-orphans
 
 ## Rebuild Workers 
-docker-compose up --rebuild -d 
+docker compose up --build --force-recreated 
 
 ## Run the algorithms
 1. Change the configuration file (`config.json`) 
