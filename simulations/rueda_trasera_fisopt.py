@@ -175,7 +175,7 @@ def composite(sim_trace):
     teta_norm =  math.sqrt(sum([(et/math.pi)**2 for et in sim_trace['error_teta']])/len(sim_trace['error_teta']))
     return error_norm + teta_norm
 
-def prueba_simulador(params, controller, grafica=False,calc_metrica=composite ):
+def prueba_simulador(params, controller, grafica=False,calc_metrica=rmse_error ):
     # puntos para definir la ruta m
     #ax = [0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0]
     #ay = [0.0, 0.0,  5.0, 6.5, 3.0, 5.0, -2.0]
@@ -208,7 +208,7 @@ def prueba_simulador(params, controller, grafica=False,calc_metrica=composite ):
     suma_error=0
     for ax, ay in lista_rutas:
 
-        error_ruta =  rutas(ax, ay, params, controller,  grafica, calc_metrica=composite)
+        error_ruta =  rutas(ax, ay, params, controller,  grafica, calc_metrica=rmse_error)  #cambiar calc_metrica
         print(error_ruta)
 
         suma_error += error_ruta[0]
@@ -219,7 +219,7 @@ def prueba_simulador(params, controller, grafica=False,calc_metrica=composite ):
 
 
 
-def rutas(ax, ay, params,controller, grafica=False, calc_metrica=composite):  # metodo a llamar 3 veces
+def rutas(ax, ay, params,controller, grafica=False, calc_metrica=rmse_error):  # metodo a llamar 3 veces, cambiar el nombre del metodo composite por error o error teta
         ruta_referencia = CubicSplinePath(ax,ay)
         meta_objetivo = [ax[-1], ay[-1]]
         sim_trace = simulacion(ruta_referencia, meta_objetivo, params, controller)
@@ -332,11 +332,7 @@ if __name__ == '__main__':
 
     # PSO-GWO dis rand 16 wk
     #solution = [0.8414225696123507, 0.27592532310914947, 0.2603595486747314, 0.31171055122530844, -0.27865674777318167,
-    solution = [0.7429843188865688, 0.4426409707487153, 0.5198999727835202, 0.8149645785722207, 0.9810647390895578, 0.5124523418132632, 0.44131889063161944, 0.6339344377860096, 0.46356873484114935, 0.3558191816820483]
-    solution = [0.8711494989571718, 0.5368013051342952, 0.47210631897614264, 0.48682313713082537, 0.7201401519559807, 0.6879296831673701, 0.4198061456392319, 0.6114770094224073, -0.2266788274123966, 0.4856464315119331]
-    solution = [0.6066034327346437, 0.6603566530460818, 0.8912308315947914, 0.014873224963206602, 0.8045841275499558,
-     0.6916140152090308, -0.08729050245281324, 0.390533904852554, 0.48972674653273507, -0.27200095431963367]
-    # 0.6768718211400274, -0.0016381118010724467, 0.2697389189824962, 0.5791988038875634, 0.3672806044221338,
+      # 0.6768718211400274, -0.0016381118010724467, 0.2697389189824962, 0.5791988038875634, 0.3672806044221338,
     # 0.5655157430878895, 0.557365716911244, 0.8282824765261503, 0.019522309904360036, 0.6243469278786694]
-    res = prueba_simulador(solution,controller, True, calc_metrica=composite)
+    res = prueba_simulador(solution,controller, True, calc_metrica=rmse_error)
     print(res)
