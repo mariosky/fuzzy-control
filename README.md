@@ -22,7 +22,11 @@ venv\Scripts\Activate.ps1
 
 ## Set Environment Variables
 ```
+POSIX:
 export REDIS_HOST=127.0.0.1
+
+WINDOWS
+setx REDIS_HOST "127.0.0.1"
 ```
 
 ## Docker compose

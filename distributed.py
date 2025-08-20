@@ -39,6 +39,7 @@ def Generador_de_poblaciones(strategies):
                 configBasica[llave] = random.uniform(
                     configBasica[llave][0], configBasica[llave][1]
                 )
+            print(llave, configBasica[llave])
         poblaciones.append(configBasica)
 
     return poblaciones
@@ -88,34 +89,38 @@ def combina_buffer(config, random=False, uniqueBuffer=False):
         if mensaje_poblacion:
             poblacion = json.loads(mensaje_poblacion)
 
-            if "dynamic_params" in config and config["dynamic_params"] == "cycle":
+            if "dynamic_params" in config:
+                if config["dynamic_params"] == "cycle":
                 # print('Población recibida ... ')
-                if "num_cycle" not in poblacion:
-                    poblacion["num_cycle"] = 1
-                elif poblacion["num_cycle"] <= 9:
-                    poblacion["num_cycle"] += 1
+                    if "num_cycle" not in poblacion:
+                        poblacion["num_cycle"] = 1
+                    elif poblacion["num_cycle"] <= 9:
+                        poblacion["num_cycle"] += 1
 
-                # if poblacion['algorithm'] == 'PSO':
-                # poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config['num_cycles']
-                # poblacion['phi2'] = poblacion['phi2'] - poblacion['phi2'] * poblacion['num_pasada'] / config['num_cycles']
-                # print(poblacion['algorithm'], poblacion['id'],poblacion['phi1'])
-                pop = [ind["solution"] for ind in poblacion["pop"]]
-                diver = diversidad(
-                    poblacion["best_solution"], pop
-                )  # calcula la diverisdad
-                print("ciclo={0}, diversidad={1}".format(poblacion["num_cycle"], diver))
-                poblacion["phi1"], poblacion["phi2"] = fis_opt_Ajuste(
-                    poblacion["num_cycle"], diver, False
-                )
-                print(
-                    "termina ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(
-                        poblacion["num_cycle"],
-                        diver,
-                        poblacion["phi1"],
-                        poblacion["phi2"],
+
+                    pop = [ind["solution"] for ind in poblacion["pop"]]
+                    diver = diversidad(
+                        poblacion["best_solution"], pop
+                    )  # calcula la diverisdad
+                    print("ciclo={0}, diversidad={1}".format(poblacion["num_cycle"], diver))
+                    poblacion["phi1"], poblacion["phi2"] = fis_opt_Ajuste( poblacion["num_cycle"], diver, False )
+                    print(
+                        "termina ciclo={0}, diversidad={1}, C1={2}, C2={3}".format(
+                            poblacion["num_cycle"],
+                            diver,
+                            poblacion["phi1"],
+                            poblacion["phi2"],
+                        )
                     )
-                )
-            #  metodo_grafica(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2'])
+                elif config["dynamic_params"] == "cycle":
+                    #  metodo_grafica(poblacion['num_cycle'], diver, poblacion['phi1'], poblacion['phi2'])
+                    if poblacion['algorithm'] == 'PSO':
+                        poblacion['phi1'] = poblacion['phi1'] - poblacion['phi1'] * poblacion['num_pasada'] / config[
+                            'num_cycles']
+                        poblacion['phi2'] = poblacion['phi2'] - poblacion['phi2'] * poblacion['num_pasada'] / config[
+                            'num_cycles']
+                        print(poblacion['algorithm'], poblacion['id'], poblacion['phi1'])
+
             num_total += 1
             num_poblaciones_recibidas += 1
             total_evals += poblacion["total_num_eval"]
