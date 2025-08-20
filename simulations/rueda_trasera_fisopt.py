@@ -113,9 +113,6 @@ def simulacion(ruta, meta_objetivo, params, controller):
             error_flag = True
             break
 
-        # Dos veces?
-        # di = control_rueda_trasera(v0, yaw0, e, k, yaw_ref,params, controller)
-
         speed_ref, direction = calc_target_speed(yaw0, yaw_ref, direction)
         aceleracion = pid_control(speed_ref, v0)
 
@@ -155,14 +152,14 @@ def simulacion(ruta, meta_objetivo, params, controller):
         'error_teta':error_teta,
         'v':v
         }
-    print(sim_trace)
+
     return sim_trace
 
 def rmse_error(sim_trace):
     error=sim_trace['error']
     error_rmse = math.sqrt(sum([e ** 2 for e in error]) / len(error))
     #error_rmse = sum([e ** 2 for e in error]) / len(error) ** .5
-    print('error:',error, ', error_rmse:', error_rmse, 'len(error)',  len(error))
+    #print('error:',error, ', error_rmse:', error_rmse, 'len(error)',  len(error))
     return error_rmse
 
 def rmse_teta_error(sim_trace):
